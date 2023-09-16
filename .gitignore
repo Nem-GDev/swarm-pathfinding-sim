@@ -1,3 +1,9 @@
-*.*
+/*
 
 !/.gitignore
+!/Headers/
+!/Source/
+!main.cpp
+!CMakeLists.txt
+!CMakePresets.json
+!LICENSE
