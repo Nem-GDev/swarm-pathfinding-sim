@@ -16,18 +16,11 @@ int main(int, char **)
 
     sf::Vector2f pos(screenWidth / 2, screenHeight / 2);
     swt::SwarmAgent ant1(sf::Color::Cyan, sf::Vector2f(2, 5), pos, screenWidth, screenHeight);
-
     swt::Colony antColony(4000, ant1);
-    // antColony.currentWindow = &window;
-    //  ant1.wallBounceCDms = 300;
-    //  ant1.rotate(-45);
-    //  std::cout << sizeof(unsigned short) << std::endl;
 
     sf::Clock clock;
     while (window.isOpen())
     {
-        // std::cout << "Latency: " << std::to_string(clock.getElapsedTime().asMilliseconds()) << std::endl;
-        // clock.restart();
         sf::Event evnt;
         while (window.pollEvent(evnt))
         {
