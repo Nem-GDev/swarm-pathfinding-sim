@@ -12,18 +12,22 @@ int main(int, char **)
     std::cout << "Hello, from swarm-pathfinding-sim!\n";
     sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight),
                             "SFML Basics", sf::Style::Close | sf::Style::Titlebar);
-    window.setFramerateLimit(90);
+    // window.setFramerateLimit(90);
 
     sf::Vector2f pos(screenWidth / 2, screenHeight / 2);
-    swt::SwarmAgent ant1(sf::Color::Cyan, sf::Vector2f(5, 12), pos, screenWidth, screenHeight);
+    swt::SwarmAgent ant1(sf::Color::Cyan, sf::Vector2f(2, 5), pos, screenWidth, screenHeight);
 
-    swt::Colony antColony(500, ant1);
-    // ant1.wallBounceCDms = 300;
-    // ant1.rotate(-45);
-    // std::cout << sizeof(unsigned short) << std::endl;
+    swt::Colony antColony(4000, ant1);
+    // antColony.currentWindow = &window;
+    //  ant1.wallBounceCDms = 300;
+    //  ant1.rotate(-45);
+    //  std::cout << sizeof(unsigned short) << std::endl;
 
+    sf::Clock clock;
     while (window.isOpen())
     {
+        // std::cout << "Latency: " << std::to_string(clock.getElapsedTime().asMilliseconds()) << std::endl;
+        // clock.restart();
         sf::Event evnt;
         while (window.pollEvent(evnt))
         {
@@ -42,17 +46,13 @@ int main(int, char **)
         {
             // ant1.rotate(1);
         }
-        //
-        // ant1.PathfindTick();
-        // ant1.MoveForward(1);
-        antColony.TickColonyMove(3);
+        // antColony.TickMove(1.0f);
+        antColony.TickMoveThreaded(3.0f, 4);
 
         window.clear(backColor);
-        // rendering
-        // window.draw(ant1);
+
         // antColony.DrawColony(window);
         window.draw(antColony);
-
         window.display();
 
         // testing repo
