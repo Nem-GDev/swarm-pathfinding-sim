@@ -3,7 +3,7 @@ project(swarm-pathfinding-sim VERSION 0.1.0 LANGUAGES CXX)
 
 include(CTest)
 enable_testing()
-add_executable(swarm-pathfinding-sim main.cpp Source/HeatMap.cpp Source/SwarmAgent.cpp Headers/SwarmAgent.h
+add_executable(swarm-pathfinding-sim main.cpp Source/HeatMap.cpp Headers/HeatMap.hpp Source/SwarmAgent.cpp Headers/SwarmAgent.h
     Source/Colony.cpp Headers/Colony.h)
 
 find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)

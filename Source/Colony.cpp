@@ -3,19 +3,19 @@
 #include <SFML/Graphics.hpp>
 #include <thread>
 #include <sstream>
+#include <time.h>
 
 using namespace swt;
 
 Colony::Colony(int count, swt::SwarmAgent agentTemplate)
 {
-    // usableThreads = std::thread::hardware_concurrency() - 8;
-    // std::cout << "Usable threads: " << usableThreads << std::endl;
     colonySize = count;
     float angleIncrement = 360.0f / count;
     for (int i = 0; i < count; i++)
     {
         SwarmAgent tempAgent(agentTemplate);
         tempAgent.setRotation(i * angleIncrement);
+        tempAgent.seed = i * angleIncrement * 643;
         colonyAgents.push_back(tempAgent);
     }
 }

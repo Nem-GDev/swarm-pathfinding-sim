@@ -13,12 +13,12 @@ int main(int, char **)
     sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight),
                             "SFML Basics", sf::Style::Close | sf::Style::Titlebar);
     // window.setFramerateLimit(90);
-
     sf::Vector2f pos(screenWidth / 2, screenHeight / 2);
-    swt::SwarmAgent ant1(sf::Color::Cyan, sf::Vector2f(2, 5), pos, screenWidth, screenHeight);
+
+    swt::SwarmAgent ant1(sf::Color(133, 66, 0), sf::Vector2f(3, 6), pos, screenWidth, screenHeight);
+    ant1.SetMovementNoisePR(4, 0.05f, 113);
     swt::Colony antColony(4000, ant1);
 
-    sf::Clock clock;
     while (window.isOpen())
     {
         sf::Event evnt;
@@ -39,8 +39,8 @@ int main(int, char **)
         {
             // ant1.rotate(1);
         }
-        // antColony.TickMove(1.0f);
-        antColony.TickMoveThreaded(3.0f, 4);
+        antColony.TickMove(2.0f);
+        // antColony.TickMoveThreaded(2.0f, 4);
 
         window.clear(backColor);
 

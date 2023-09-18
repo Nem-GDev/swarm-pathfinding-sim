@@ -4,6 +4,7 @@
 #include <SFML\Graphics.hpp>
 #include <cmath>
 #include "SwarmAgent.h"
+#include <time.h>
 
 using namespace swt;
 
@@ -14,7 +15,6 @@ SwarmAgent::SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position
     this->setFillColor(color);
     screenWidth = screenX;
     screenHeight = screenY;
-
     sf::Vector2f origin((float)size.x / 2, (float)size.y / 2);
     this->setOrigin(origin);
     CalculateForward();
@@ -31,6 +31,13 @@ void SwarmAgent::PathfindTick()
 // This method scope must be optimized
 void SwarmAgent::MoveForward(float steps)
 {
+    if (hasMovementNoise)
+    {
+        currentMovementNoisePoll++;
+        if (currentMovementNoisePoll >= movementNoisePR)
+            AddMovementNoise();
+    }
+
     CalculateForward();
     this->move(nForward * steps);
     CheckScreenBounds(screenWidth, screenHeight);
@@ -72,4 +79,22 @@ void SwarmAgent::CheckScreenBounds(float screenX, float screenY)
     }
     else
         yOutOfBounds = false;
+}
+
+void SwarmAgent::SetMovementNoisePR(int pollRate, float strength, int directions)
+{
+    hasMovementNoise = true;
+    movementNoisePR = pollRate;
+    movementNoiseStrength = strength;
+    movementNoiseDirections = directions;
+}
+
+void SwarmAgent::AddMovementNoise()
+{
+    currentMovementNoisePoll = 0;
+    srand(unsigned(seed * (int)time(NULL)));
+    int x = rand();
+    float change = (x % movementNoiseDirections) * movementNoiseStrength;
+    change = ((x % 2) == 0) ? change * -1 : change * 1;
+    this->rotate(change);
 }
