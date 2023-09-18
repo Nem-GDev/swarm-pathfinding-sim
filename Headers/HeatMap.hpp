@@ -4,14 +4,25 @@
 
 namespace swt
 {
-    class HeatMap
+    class HeatMap : public sf::Drawable
     {
     private:
-        int resolution;
-        std::vector<std::vector<unsigned short>> map;
+        short mapPrecision, screenWidth, screenHeight;
+        short mapWidth, mapHeight, visualMapWidth, visualMapHeight;
+        int mapSize, visualMapSize;
+        std::vector<std::vector<short>> map;
+        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+        sf::VertexArray visualMap;
+        void InitVisualMap();
 
     public:
-        HeatMap(int resolution, int screenWidth, int screenHeight);
+        HeatMap(int resolution, int screenWidth, int screenHeight, sf::Color heatColor);
+        void AddHeat(short screenXPos, short screenYPos, short value);
+        void SubtractHeat(short screenXPos, short screenYPos, short value);
+        short GetHeat(short screenXPos, short screenYPos);
+        void TickDown();
+        void UpdateVisualMap();
+        sf::Color baseHeatColor;
     };
 
 }
