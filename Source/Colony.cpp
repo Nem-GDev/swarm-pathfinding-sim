@@ -1,34 +1,36 @@
-#include "Colony.h"
+#include "Colony.hpp"
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <thread>
 #include <sstream>
 #include <time.h>
+#include "HeatMap.hpp"
 
 using namespace swt;
 
-Colony::Colony(int count, swt::SwarmAgent agentTemplate)
+Colony::Colony(int count, swt::SwarmAgent agentTemplate, HeatMap &hm)
 {
     colonySize = count;
     float angleIncrement = 360.0f / count;
     for (int i = 0; i < count; i++)
     {
         SwarmAgent tempAgent(agentTemplate);
+        // tempAgent.RefHeatMap(hm);
         tempAgent.setRotation(i * angleIncrement);
         tempAgent.seed = i * angleIncrement * 643;
         colonyAgents.push_back(tempAgent);
     }
 }
 
-void Colony::TickMove(float steps)
+void Colony::TickMove(float steps, float dt)
 {
     for (unsigned int i = 0; i < colonySize; i++)
     {
-        colonyAgents[i].MoveForward(steps);
+        colonyAgents[i].MoveForward(steps, dt);
     }
 }
 
-void Colony::TickMoveThreaded(float steps, unsigned short threads)
+void Colony::TickMoveThreaded(float steps, unsigned short threads, float dt)
 {
     usableThreads = threads;
     if (!threadsLive)
@@ -37,7 +39,7 @@ void Colony::TickMoveThreaded(float steps, unsigned short threads)
         int perThread = colonySize / usableThreads;
         for (int i = 0; i < usableThreads; i++)
         {
-            std::thread thread(&swt::Colony::ThreadMoveJob, this, perThread, (i + 1), steps);
+            std::thread thread(&swt::Colony::ThreadMoveJob, this, perThread, (i + 1), steps, dt);
             thread.detach();
         }
         threadsLive = true;
@@ -45,7 +47,7 @@ void Colony::TickMoveThreaded(float steps, unsigned short threads)
     updateThreads = true;
 }
 
-void Colony::ThreadMoveJob(int agentsNo, int threadNum, float steps)
+void Colony::ThreadMoveJob(int agentsNo, int threadNum, float steps, float dt)
 {
     // TODO: complete final thread application (non divisable by thread count)
     bool finalThread = false;
@@ -65,16 +67,11 @@ void Colony::ThreadMoveJob(int agentsNo, int threadNum, float steps)
             updateThreads = false;
             for (int i = startOffset; i < endOffset; i++)
             {
-                colonyAgents[i].MoveForward(steps);
+                colonyAgents[i].MoveForward(steps, dt);
             }
             // DrawColonyThreaded(startOffset, endOffset);
         }
     }
-}
-
-void Colony::SetCurrentWindow(sf::RenderWindow &window)
-{
-    // currentWindow = window;
 }
 
 void Colony::DrawColonyThreaded(int s, int e)
