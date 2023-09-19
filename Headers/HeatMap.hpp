@@ -8,7 +8,7 @@ namespace swt
     {
     private:
         short mapPrecision, screenWidth, screenHeight;
-        short mapWidth, mapHeight, visualMapWidth, visualMapHeight;
+        short mapWidth, mapHeight, visualMapWidth, visualMapHeight, mapWRange, mapHRange;
         int mapSize, visualMapSize;
         std::vector<std::vector<short>> map;
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
@@ -17,10 +17,10 @@ namespace swt
 
     public:
         HeatMap(int resolution, int screenWidth, int screenHeight, sf::Color heatColor);
-        void AddHeat(short screenXPos, short screenYPos, short value);
+        void AddHeat(sf::Vector2f point, short value);
         void SubtractHeat(short screenXPos, short screenYPos, short value);
-        short GetHeat(short screenXPos, short screenYPos);
-        void TickDown();
+        short GetHeat(sf::Vector2f point);
+        void TickDown(float dt);
         void UpdateVisualMap();
         sf::Color baseHeatColor;
     };

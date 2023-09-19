@@ -15,6 +15,8 @@ HeatMap::HeatMap(int resolution, int screenWidth, int screenHeight, sf::Color he
     this->mapHeight = screenHeight / mapPrecision;
     this->map.resize(mapHeight, std::vector<short>(mapWidth, 0));
     this->mapSize = mapWidth * mapHeight;
+    this->mapWRange = mapWidth - 1;
+    this->mapHRange = mapHeight - 1;
 
     this->visualMapWidth = mapWidth * 4;
     this->visualMapSize = mapSize * 4;
@@ -45,16 +47,17 @@ HeatMap::HeatMap(int resolution, int screenWidth, int screenHeight, sf::Color he
     InitVisualMap();
 }
 
-void HeatMap::AddHeat(short screenXPos, short screenYPos, short value)
+void HeatMap::AddHeat(sf::Vector2f point, short value)
 {
     // TODO: refactor validation to new method
-    short sY = std::max((short)0, screenXPos);
-    sY = std::min(screenWidth, (short)screenXPos);
-    short sX = std::max((short)0, screenYPos);
-    sX = std::min(screenHeight, (short)screenYPos);
+    short y = point.y / mapPrecision;
+    short x = point.x / mapPrecision;
 
-    short y = sY / mapPrecision;
-    short x = sX / mapPrecision;
+    y = std::max((short)0, y);
+    x = std::max((short)0, x);
+
+    y = std::min(mapHRange, y);
+    x = std::min(mapWRange, x);
 
     map[x][y] += value;
 }
@@ -67,27 +70,32 @@ void HeatMap::SubtractHeat(short screenXPos, short screenYPos, short value)
     // if(map[x][y] >0)
     // map[x][y] -=
 }
-short HeatMap::GetHeat(short screenXPos, short screenYPos)
+short HeatMap::GetHeat(sf::Vector2f point)
 {
     // TODO: refactor validation to new method
-    short sY = std::max((short)0, screenXPos);
-    sY = std::min(screenWidth, (short)screenXPos);
-    short sX = std::max((short)0, screenYPos);
-    sX = std::min(screenHeight, (short)screenYPos);
+    short y = point.y / mapPrecision;
+    short x = point.x / mapPrecision;
 
-    short y = sY / mapPrecision;
-    short x = sX / mapPrecision;
+    y = std::max((short)0, y);
+    x = std::max((short)0, x);
 
+    y = std::min(mapHRange, y);
+    x = std::min(mapWRange, x);
+
+    // iob ??
     return map[x][y];
 }
-void HeatMap::TickDown()
+void HeatMap::TickDown(float dt)
 {
     for (int i = 0; i < mapHeight; i++)
     {
+        short temp;
         for (int j = 0; j < mapWidth; j++)
         {
             // will not go lower than 0
-            map[i][j] = std::max((short)0, --map[i][j]);
+            // std::cout << (--map[i][j] * dt * 1000) << std::endl;
+            temp = map[i][j] - (dt * 100);
+            map[i][j] = std::max((short)0, temp);
         }
     }
 }

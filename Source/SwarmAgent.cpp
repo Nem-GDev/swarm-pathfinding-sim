@@ -3,18 +3,21 @@
 #include <iostream>
 #include <SFML\Graphics.hpp>
 #include <cmath>
-#include "SwarmAgent.h"
+#include "SwarmAgent.hpp"
+#include "HeatMap.hpp"
 #include <time.h>
 
 using namespace swt;
 
-SwarmAgent::SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position, float screenX, float screenY)
+SwarmAgent::SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position, sf::Vector2f screenSize, HeatMap &hm, float obedience)
 {
+    this->obedience = obedience;
+    this->hm1 = &hm;
     this->setSize(size);
     this->setPosition(position);
     this->setFillColor(color);
-    screenWidth = screenX;
-    screenHeight = screenY;
+    screenWidth = screenSize.x;
+    screenHeight = screenSize.y;
     sf::Vector2f origin((float)size.x / 2, (float)size.y / 2);
     this->setOrigin(origin);
     CalculateForward();
@@ -29,17 +32,25 @@ void SwarmAgent::PathfindTick()
 }
 
 // This method scope must be optimized
-void SwarmAgent::MoveForward(float steps)
+void SwarmAgent::MoveForward(float steps, float dt)
 {
+    // rotations
     if (hasMovementNoise)
     {
         currentMovementNoisePoll++;
         if (currentMovementNoisePoll >= movementNoisePR)
-            AddMovementNoise();
+            AddMovementNoise(dt);
     }
+    FollowHeat(obedience, dt);
 
+    // forward calculation and movement
     CalculateForward();
-    this->move(nForward * steps);
+    this->move(nForward * steps * dt);
+
+    lAntenna.setPosition(this->getTransform().transformPoint(this->getPoint(0)));
+    rAntenna.setPosition(this->getTransform().transformPoint(this->getPoint(1)));
+
+    // collision / out of bounds detection
     CheckScreenBounds(screenWidth, screenHeight);
 }
 
@@ -89,12 +100,46 @@ void SwarmAgent::SetMovementNoisePR(int pollRate, float strength, int directions
     movementNoiseDirections = directions;
 }
 
-void SwarmAgent::AddMovementNoise()
+void SwarmAgent::AddMovementNoise(float dt)
 {
     currentMovementNoisePoll = 0;
     srand(unsigned(seed * (int)time(NULL)));
     int x = rand();
     float change = (x % movementNoiseDirections) * movementNoiseStrength;
     change = ((x % 2) == 0) ? change * -1 : change * 1;
-    this->rotate(change);
+    this->rotate(change * dt);
+}
+
+void SwarmAgent::FollowHeat(float strength, float dt)
+{
+    //! Note: For correct behavior resolution of heatmap needs to be smaller than ant width
+    sf::Vector2f lPos(lAntenna.getPosition());
+    sf::Vector2f rPos(rAntenna.getPosition());
+
+    short lHeat = hm1->GetHeat(lPos);
+    short rHeat = hm1->GetHeat(rPos);
+
+    if (lHeat > rHeat)
+    {
+        this->rotate(-strength * dt);
+    }
+    else if (rHeat > lHeat)
+    {
+        this->rotate(strength * dt);
+    }
+}
+
+sf::RectangleShape SwarmAgent::DebugRAntenna()
+{
+    sf::RectangleShape rA(sf::Vector2f(4, 4));
+    rA.setFillColor(sf::Color::Red);
+    rA.setPosition(rAntenna.getPosition());
+    return rA;
+}
+sf::RectangleShape SwarmAgent::DebugLAntenna()
+{
+    sf::RectangleShape lA(sf::Vector2f(4, 4));
+    lA.setFillColor(sf::Color::Cyan);
+    lA.setPosition(lAntenna.getPosition());
+    return lA;
 }
