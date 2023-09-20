@@ -12,7 +12,7 @@ namespace swt
         sf::Transformable rAntenna;
         bool xOutOfBounds, yOutOfBounds, hasMovementNoise = false;
         float screenWidth, screenHeight, movementNoiseStrength, obedience, currentPheromoneRange, pheromoneDepletion;
-        float maxPheromone = 8000;
+        float maxPheromone = 1500;
         double pherDeduct;
         int movementNoisePR = 0, currentMovementNoisePoll = 0, movementNoiseDirections = 0;
         HeatMap *toHome, *toFood, *homeSource, *foodSource;

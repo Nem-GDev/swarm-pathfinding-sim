@@ -11,8 +11,8 @@ sf::Color backColor(230, 185, 80);
 constexpr float
     OBEDIENCE = 800.f,
     //? Depletion >= Decay for reversed path disappearance
-    PHEROMONE_DEPLETION = 10.f,
-    PHEROMONE_DECAY = 10.f,
+    PHEROMONE_DEPLETION = 2.f,
+    PHEROMONE_DECAY = 2.f,
     /////? Speed effects range AND smoothens path disappearance
     MOVE_STEPS = 200.f,
     MOVEMENT_NOISE = 0.2f,

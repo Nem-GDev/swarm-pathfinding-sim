@@ -7,7 +7,7 @@ using namespace swt;
 
 HeatMap::HeatMap(int resolution, sf::Vector2f screen, sf::Color heatColor)
 {
-    this->alphaConversion = 255.00 / 32700.00;
+    this->alphaConversion = 255.00 / 32000.00;
     this->baseHeatColor = heatColor;
     this->mapPrecision = resolution;
     this->screenWidth = screen.x;
