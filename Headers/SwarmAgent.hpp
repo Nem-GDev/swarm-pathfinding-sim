@@ -8,25 +8,36 @@ namespace swt
     {
     private:
         sf::Vector2f nForward;
-        void CalculateForward();
-        void CheckScreenBounds(float screenX, float screenY);
-        void AddMovementNoise(float dt);
-        void FollowHeat(float strength, float dt);
         sf::Transformable lAntenna;
         sf::Transformable rAntenna;
         bool xOutOfBounds, yOutOfBounds, hasMovementNoise = false;
-        float screenWidth, screenHeight, movementNoiseStrength, obedience;
+        float screenWidth, screenHeight, movementNoiseStrength, obedience, currentPheromoneRange, pheromoneDepletion;
+        float maxPheromone = 6000;
+        double pherDeduct;
         int movementNoisePR = 0, currentMovementNoisePoll = 0, movementNoiseDirections = 0;
-        HeatMap *hm1;
+        HeatMap *toHome, *toFood, *homeSource, *foodSource;
+        enum Pheromone
+        {
+            DepartingHome = 1,
+            FoundFood = 2
+        };
+        Pheromone currentPheromone = Pheromone::DepartingHome;
+        void CalculateForward();
+        void CheckScreenBounds(float screenX, float screenY);
+        void AddMovementNoise(float dt);
+        void FollowMap(float strength, float dt);
+        void ScanForSource();
+        void EmitPheromone(float dt);
 
     public:
+        int seed;
         sf::RectangleShape DebugRAntenna();
         sf::RectangleShape DebugLAntenna();
-        SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position, sf::Vector2f screenSize, HeatMap &hm, float obedience);
-        void PathfindTick();
+        SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position, sf::Vector2f screenSize, float obedience);
         void MoveForward(float step, float dt);
         void SetMovementNoisePR(int pollRate, float strength, int directions);
-        int seed;
+        void SetPheromoneMaps(HeatMap &toHome, HeatMap &toFood);
+        void SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource, float pheromoneDepletion);
     };
 
 }

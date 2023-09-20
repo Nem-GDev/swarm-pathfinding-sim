@@ -8,7 +8,7 @@
 
 using namespace swt;
 
-Colony::Colony(int count, swt::SwarmAgent agentTemplate, HeatMap &hm)
+Colony::Colony(int count, swt::SwarmAgent agentTemplate)
 {
     colonySize = count;
     float angleIncrement = 360.0f / count;

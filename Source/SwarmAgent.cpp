@@ -9,10 +9,10 @@
 
 using namespace swt;
 
-SwarmAgent::SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position, sf::Vector2f screenSize, HeatMap &hm, float obedience)
+SwarmAgent::SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position, sf::Vector2f screenSize, float obedience)
 {
     this->obedience = obedience;
-    this->hm1 = &hm;
+    // this->toFood = &hm;
     this->setSize(size);
     this->setPosition(position);
     this->setFillColor(color);
@@ -25,12 +25,6 @@ SwarmAgent::SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position
     yOutOfBounds = false;
 }
 
-void SwarmAgent::PathfindTick()
-{
-    this->setRotation(this->getRotation() + 0.5f);
-    this->move(sf::Vector2f(0, -0.5f));
-}
-
 // This method scope must be optimized
 void SwarmAgent::MoveForward(float steps, float dt)
 {
@@ -41,17 +35,20 @@ void SwarmAgent::MoveForward(float steps, float dt)
         if (currentMovementNoisePoll >= movementNoisePR)
             AddMovementNoise(dt);
     }
-    FollowHeat(obedience, dt);
+    FollowMap(obedience, dt);
 
     // forward calculation and movement
     CalculateForward();
     this->move(nForward * steps * dt);
-
+    // antenna position update
     lAntenna.setPosition(this->getTransform().transformPoint(this->getPoint(0)));
     rAntenna.setPosition(this->getTransform().transformPoint(this->getPoint(1)));
 
     // collision / out of bounds detection
     CheckScreenBounds(screenWidth, screenHeight);
+
+    ScanForSource();
+    EmitPheromone(dt);
 }
 
 void SwarmAgent::CalculateForward()
@@ -110,23 +107,92 @@ void SwarmAgent::AddMovementNoise(float dt)
     this->rotate(change * dt);
 }
 
-void SwarmAgent::FollowHeat(float strength, float dt)
+void SwarmAgent::FollowMap(float strength, float dt)
 {
     //! Note: For correct behavior resolution of heatmap needs to be smaller than ant width
     sf::Vector2f lPos(lAntenna.getPosition());
     sf::Vector2f rPos(rAntenna.getPosition());
+    short lPheromones;
+    short rPheromones;
 
-    short lHeat = hm1->GetHeat(lPos);
-    short rHeat = hm1->GetHeat(rPos);
+    if (currentPheromone == Pheromone::DepartingHome)
+    {
+        lPheromones = toFood->GetHeat(lPos);
+        rPheromones = toFood->GetHeat(rPos);
+    }
+    else if (currentPheromone == Pheromone::FoundFood)
+    {
+        lPheromones = toHome->GetHeat(lPos);
+        rPheromones = toHome->GetHeat(rPos);
+    }
 
-    if (lHeat > rHeat)
+    if (lPheromones > rPheromones)
     {
         this->rotate(-strength * dt);
     }
-    else if (rHeat > lHeat)
+    else if (rPheromones > lPheromones)
     {
         this->rotate(strength * dt);
     }
+}
+
+void SwarmAgent::ScanForSource()
+{
+    sf::Vector2f lPos(lAntenna.getPosition());
+    sf::Vector2f rPos(rAntenna.getPosition());
+    short foodSourceFoundL;
+    short foodSourceFoundR;
+    short homeSourceFoundL;
+    short homeSourceFoundR;
+
+    foodSourceFoundL = foodSource->GetHeat(lPos);
+    foodSourceFoundR = foodSource->GetHeat(rPos);
+    homeSourceFoundL = homeSource->GetHeat(lPos);
+    homeSourceFoundR = homeSource->GetHeat(rPos);
+
+    if (foodSourceFoundL > 0 && foodSourceFoundR > 0)
+    {
+        if (currentPheromone == Pheromone::DepartingHome)
+            this->rotate(180);
+        currentPheromone = Pheromone::FoundFood;
+        currentPheromoneRange = maxPheromone;
+    }
+    else if (homeSourceFoundL > 0 && homeSourceFoundR > 0)
+    {
+        if (currentPheromone == Pheromone::FoundFood)
+            this->rotate(180);
+        currentPheromone = Pheromone::DepartingHome;
+        currentPheromoneRange = maxPheromone;
+    }
+}
+
+void SwarmAgent::EmitPheromone(float dt)
+{
+    pherDeduct = currentPheromoneRange - dt * (double)pheromoneDepletion;
+    currentPheromoneRange = std::max(0, (int)pherDeduct);
+    // std::cout << (short)currentPheromoneRange << std::endl;
+    if (currentPheromone == Pheromone::DepartingHome)
+    {
+        toHome->AddHeat(this->getPosition(), (short)currentPheromoneRange);
+    }
+    else if (currentPheromone == Pheromone::FoundFood)
+    {
+        toFood->AddHeat(this->getPosition(), (short)currentPheromoneRange);
+    }
+}
+
+void SwarmAgent::SetPheromoneMaps(HeatMap &toHome, HeatMap &toFood)
+{
+    this->toHome = &toHome;
+    this->toFood = &toFood;
+}
+
+void SwarmAgent::SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource, float pheromoneDepletion)
+{
+    this->homeSource = &homeSource;
+    this->foodSource = &foodSource;
+    this->pheromoneDepletion = pheromoneDepletion;
+    currentPheromoneRange = maxPheromone;
 }
 
 sf::RectangleShape SwarmAgent::DebugRAntenna()

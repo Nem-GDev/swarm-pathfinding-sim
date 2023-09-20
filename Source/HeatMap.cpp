@@ -5,12 +5,13 @@
 
 using namespace swt;
 
-HeatMap::HeatMap(int resolution, int screenWidth, int screenHeight, sf::Color heatColor)
+HeatMap::HeatMap(int resolution, sf::Vector2f screen, sf::Color heatColor)
 {
+    this->alphaConversion = 255.00 / 32700.00;
     this->baseHeatColor = heatColor;
     this->mapPrecision = resolution;
-    this->screenWidth = screenWidth;
-    this->screenHeight = screenHeight;
+    this->screenWidth = screen.x;
+    this->screenHeight = screen.y;
     this->mapWidth = screenWidth / mapPrecision;
     this->mapHeight = screenHeight / mapPrecision;
     this->map.resize(mapHeight, std::vector<short>(mapWidth, 0));
@@ -52,6 +53,7 @@ void HeatMap::AddHeat(sf::Vector2f point, short value)
     // TODO: refactor validation to new method
     short y = point.y / mapPrecision;
     short x = point.x / mapPrecision;
+    int newVal;
 
     y = std::max((short)0, y);
     x = std::max((short)0, x);
@@ -59,7 +61,10 @@ void HeatMap::AddHeat(sf::Vector2f point, short value)
     y = std::min(mapHRange, y);
     x = std::min(mapWRange, x);
 
-    map[x][y] += value;
+    newVal = map[x][y] + value;
+    newVal = std::max(0, newVal);
+    newVal = std::min(32700, newVal);
+    map[x][y] = newVal;
 }
 void HeatMap::SubtractHeat(short screenXPos, short screenYPos, short value)
 {
@@ -85,7 +90,7 @@ short HeatMap::GetHeat(sf::Vector2f point)
     // iob ??
     return map[x][y];
 }
-void HeatMap::TickDown(float dt)
+void HeatMap::TickDown(float strength, float dt)
 {
     for (int i = 0; i < mapHeight; i++)
     {
@@ -93,8 +98,7 @@ void HeatMap::TickDown(float dt)
         for (int j = 0; j < mapWidth; j++)
         {
             // will not go lower than 0
-            // std::cout << (--map[i][j] * dt * 1000) << std::endl;
-            temp = map[i][j] - (dt * 100);
+            temp = map[i][j] - (dt * strength);
             map[i][j] = std::max((short)0, temp);
         }
     }
@@ -106,6 +110,7 @@ void HeatMap::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 void HeatMap::InitVisualMap()
 {
+    std::cout << "Initing" << std::endl;
     sf::Vector2f v0(0, 0);
     sf::Vector2f v1(0, 0);
     sf::Vector2f v2(0, 0);
@@ -183,7 +188,9 @@ void HeatMap::UpdateVisualMap()
             // from
             // 0 1 2 3, 4 5 6 7...
             tempColor = visualMap[currentFirst].color;
-            tempColor.a = std::min(255, (int)map[i][j]);
+            int convertedAlpha = map[j][i] * alphaConversion;
+
+            tempColor.a = std::min(255, convertedAlpha);
             visualMap[currentFirst].color = tempColor;
             visualMap[++currentFirst].color = tempColor;
             visualMap[++currentFirst].color = tempColor;
