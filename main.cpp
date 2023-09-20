@@ -6,14 +6,18 @@
 
 int screenWidth = 896;
 int screenHeight = 896;
-sf::Color backColor(230, 185, 80);
-
+//? Currently tested Depletion*Move_Step:Max_Pheromone ratio ->
+//? 5*200:6000
+//? 2*200:3000
 constexpr float
     OBEDIENCE = 600.f,
-    MAX_PHEROMONE = 6000.f,
+    //? Lower MaxPheromone = Higher Unity, Stability.
+    //? Higher MaxPheromone = Higher mutation & new paths; Faster pathmap regeneration. Less Stability & Unity.
+    MAX_PHEROMONE = 3000.f,
     //? Depletion >= Decay for reversed path disappearance
-    PHEROMONE_DEPLETION = 6.f,
-    PHEROMONE_DECAY = 6.f,
+    //? (Depletion+Decay)/Max_Pheromone = Relative range
+    PHEROMONE_DEPLETION = 2.f,
+    PHEROMONE_DECAY = 2.f,
     MOVE_STEPS = 200.f,
     MOVEMENT_NOISE = 0.15f,
     COLONY_SIZE = 300.f;
@@ -36,6 +40,7 @@ int main(int, char **)
     window.setKeyRepeatEnabled(false);
     sf::Vector2f spawnPos(screenWidth / 2, screenHeight / 2);
     sf::Vector2f screen(screenWidth, screenHeight);
+    sf::Color backColor(230, 185, 80);
 
     //! Screen dimensions must be divisable by heatmap resolution!
     swt::HeatMap toFood(4, screen, sf::Color(140, 255, 0));
