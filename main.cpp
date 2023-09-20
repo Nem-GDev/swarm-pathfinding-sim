@@ -43,9 +43,9 @@ int main(int, char **)
     swt::HeatMap toHome(4, screen, sf::Color(0, 140, 255));
     toHome.UpdateVisualMap();
 
-    swt::HeatMap homeSource(96, screen, sf::Color(0, 5, 140));
+    swt::HeatMap homeSource(64, screen, sf::Color(0, 5, 140));
     homeSource.UpdateVisualMap();
-    swt::HeatMap foodSource(96, screen, sf::Color(0, 80, 30));
+    swt::HeatMap foodSource(64, screen, sf::Color(0, 80, 30));
     // toFood.AddHeat(sf::Vector2f(300, 300), 20000);
     foodSource.UpdateVisualMap();
 
@@ -63,8 +63,8 @@ int main(int, char **)
     sf::Clock clock;
     float deltaTime;
     char paint;
-    bool showMaps = false;
-    bool showAnts = false;
+    bool showMaps = true;
+    bool showAnts = true;
 
     while (window.isOpen())
     {
