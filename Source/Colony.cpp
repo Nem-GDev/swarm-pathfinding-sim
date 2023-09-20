@@ -15,7 +15,6 @@ Colony::Colony(int count, swt::SwarmAgent agentTemplate)
     for (int i = 0; i < count; i++)
     {
         SwarmAgent tempAgent(agentTemplate);
-        // tempAgent.RefHeatMap(hm);
         tempAgent.setRotation(i * angleIncrement);
         tempAgent.seed = i * angleIncrement * 643;
         colonyAgents.push_back(tempAgent);
@@ -49,7 +48,7 @@ void Colony::TickMoveThreaded(float steps, unsigned short threads, float dt)
 
 void Colony::ThreadMoveJob(int agentsNo, int threadNum, float steps, float dt)
 {
-    // TODO: complete final thread application (non divisable by thread count)
+    // NOTE: ThreadMoveJob is deprecated -
     bool finalThread = false;
     if (threadNum == usableThreads)
         finalThread = true;
@@ -82,7 +81,6 @@ void Colony::DrawColonyThreaded(int s, int e)
     {
         std::cout << "called" << std::endl;
         currentWindow->draw(colonyAgents[i]);
-        // currentWindow.draw(colonyAgents[i]);
     }
 }
 

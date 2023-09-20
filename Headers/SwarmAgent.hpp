@@ -38,7 +38,7 @@ namespace swt
         void MoveForward(float step, float dt);
         void SetMovementNoisePR(int pollRate, float strength, int directions);
         void SetPheromoneMaps(HeatMap &toHome, HeatMap &toFood);
-        void SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource, float pheromoneDepletion);
+        void SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource, float pheromoneDepletion, float maxPheromone);
     };
 
 }

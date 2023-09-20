@@ -13,7 +13,6 @@ SwarmAgent::SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position
 {
     this->obedience = obedience;
     this->currentPheromoneRange = maxPheromone;
-    // this->toFood = &hm;
     this->setSize(size);
     this->setPosition(position);
     this->setFillColor(color);
@@ -48,6 +47,7 @@ void SwarmAgent::MoveForward(float steps, float dt)
     // collision / out of bounds detection
     CheckScreenBounds(screenWidth, screenHeight);
 
+    // Pheromones & pathing
     ScanForSource();
     EmitPheromone(steps, dt);
 }
@@ -111,30 +111,72 @@ void SwarmAgent::AddMovementNoise(float steps, float dt)
 void SwarmAgent::FollowMap(float strength, float dt)
 {
     //! Note: For correct behavior resolution of heatmap needs to be smaller than ant width
+    // sf::Vector2f lPos(lAntenna.getPosition());
+    // sf::Vector2f rPos(rAntenna.getPosition());
+    // short lPheromones;
+    // short rPheromones;
     sf::Vector2f lPos(lAntenna.getPosition());
     sf::Vector2f rPos(rAntenna.getPosition());
-    short lPheromones;
-    short rPheromones;
+    short foodPathFoundL;
+    short foodPathFoundR;
+    short homePathFoundL;
+    short homePathFoundR;
 
-    if (currentPheromone != Pheromone::FoundFood)
+    foodPathFoundL = toFood->GetHeat(lPos);
+    foodPathFoundR = toFood->GetHeat(rPos);
+    homePathFoundL = toHome->GetHeat(lPos);
+    homePathFoundR = toHome->GetHeat(rPos);
+
+    if (currentPheromone == Pheromone::FoundFood)
     {
-        lPheromones = toFood->GetHeat(lPos);
-        rPheromones = toFood->GetHeat(rPos);
+        if (homePathFoundL > homePathFoundR)
+        {
+            this->rotate(-strength * dt);
+        }
+        else if (homePathFoundR > homePathFoundL)
+        {
+            this->rotate(strength * dt);
+        }
     }
-    if (currentPheromone != Pheromone::DepartingHome)
+    else if (currentPheromone == Pheromone::DepartingHome)
     {
-        lPheromones = toHome->GetHeat(lPos);
-        rPheromones = toHome->GetHeat(rPos);
+        if (foodPathFoundL > foodPathFoundR)
+        {
+            this->rotate(-strength * dt);
+        }
+        else if (foodPathFoundR > foodPathFoundL)
+        {
+            this->rotate(strength * dt);
+        }
+    }
+    else if (currentPheromone == Pheromone::Lost)
+    {
+        if (homePathFoundL > homePathFoundR)
+        {
+            this->rotate(-strength * dt);
+        }
+        else if (homePathFoundL > homePathFoundR)
+        {
+            this->rotate(strength * dt);
+        }
+        else if (foodPathFoundL > foodPathFoundR)
+        {
+            this->rotate(-strength * dt);
+        }
+        else if (foodPathFoundR > foodPathFoundL)
+        {
+            this->rotate(strength * dt);
+        }
     }
 
-    if (lPheromones > rPheromones)
-    {
-        this->rotate(-strength * dt);
-    }
-    else if (rPheromones > lPheromones)
-    {
-        this->rotate(strength * dt);
-    }
+    // if (lPheromones > rPheromones)
+    // {
+    //     this->rotate(-strength * dt);
+    // }
+    // else if (rPheromones > lPheromones)
+    // {
+    //     this->rotate(strength * dt);
+    // }
 }
 
 void SwarmAgent::ScanForSource()
@@ -160,7 +202,7 @@ void SwarmAgent::ScanForSource()
     }
     else if (homeSourceFoundL || 0 && homeSourceFoundR > 0)
     {
-        if (currentPheromone == Pheromone::DepartingHome)
+        if (currentPheromone != Pheromone::DepartingHome)
             this->rotate(180);
         currentPheromone = Pheromone::DepartingHome;
         currentPheromoneRange = maxPheromone;
@@ -191,11 +233,12 @@ void SwarmAgent::SetPheromoneMaps(HeatMap &toHome, HeatMap &toFood)
     this->toFood = &toFood;
 }
 
-void SwarmAgent::SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource, float pheromoneDepletion)
+void SwarmAgent::SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource, float pheromoneDepletion, float maxPheromone)
 {
     this->homeSource = &homeSource;
     this->foodSource = &foodSource;
     this->pheromoneDepletion = pheromoneDepletion;
+    this->maxPheromone = maxPheromone;
     currentPheromoneRange = maxPheromone;
 }
 

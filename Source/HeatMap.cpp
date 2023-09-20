@@ -5,6 +5,7 @@
 
 using namespace swt;
 
+//! Screen dimensions must be divisable by heatmap resolution!
 HeatMap::HeatMap(int resolution, sf::Vector2f screen, sf::Color heatColor)
 {
     this->alphaConversion = 255.00 / 32000.00;
@@ -27,8 +28,8 @@ HeatMap::HeatMap(int resolution, sf::Vector2f screen, sf::Color heatColor)
     std::cout << "\nHeatmap: " << mapWidth << "x" << mapHeight << std::endl;
     std::cout << "Map size: " << mapSize << std::endl;
     std::cout << "Visual map size: " << visualMapSize << std::endl;
-    std::cout << "Visual Map Width: " << visualMapWidth << std::endl;
 
+    // Sample Iteration through visual map.
     int b = 0;
     for (int i = 0; i < mapHeight; i++)
     {
@@ -66,15 +67,6 @@ void HeatMap::AddHeat(sf::Vector2f point, short value)
     newVal = std::min(32700, newVal);
     map[x][y] = newVal;
 }
-void HeatMap::SubtractHeat(short screenXPos, short screenYPos, short value)
-{
-    //! Currently deprecated
-    // // only use this function for ocasional subtraction
-    // int x = screenXPos / resolution;
-    // int y = screenYPos / resolution;
-    // if(map[x][y] >0)
-    // map[x][y] -=
-}
 short HeatMap::GetHeat(sf::Vector2f point)
 {
     // TODO: refactor validation to new method
@@ -110,6 +102,12 @@ void HeatMap::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 void HeatMap::InitVisualMap()
 {
+    // ? Quad clockwise vertex pattern
+    // arr[0].position = sf::Vector2f(240, 240);
+    // arr[1].position = sf::Vector2f(240, 340);
+    // arr[2].position = sf::Vector2f(340, 340);
+    // arr[3].position = sf::Vector2f(340, 240);
+
     std::cout << "Initing" << std::endl;
     sf::Vector2f v0(0, 0);
     sf::Vector2f v1(0, 0);

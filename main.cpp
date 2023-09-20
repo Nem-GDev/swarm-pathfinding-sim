@@ -9,13 +9,13 @@ int screenHeight = 896;
 sf::Color backColor(230, 185, 80);
 
 constexpr float
-    OBEDIENCE = 800.f,
+    OBEDIENCE = 600.f,
+    MAX_PHEROMONE = 6000.f,
     //? Depletion >= Decay for reversed path disappearance
-    PHEROMONE_DEPLETION = 2.f,
-    PHEROMONE_DECAY = 2.f,
-    /////? Speed effects range AND smoothens path disappearance
+    PHEROMONE_DEPLETION = 6.f,
+    PHEROMONE_DECAY = 6.f,
     MOVE_STEPS = 200.f,
-    MOVEMENT_NOISE = 0.2f,
+    MOVEMENT_NOISE = 0.15f,
     COLONY_SIZE = 300.f;
 
 int main(int, char **)
@@ -34,32 +34,27 @@ int main(int, char **)
     sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight),
                             "SFML Basics", sf::Style::Close | sf::Style::Titlebar);
     window.setKeyRepeatEnabled(false);
-    // window.setFramerateLimit(90);
-    sf::Vector2f pos(screenWidth / 2, screenHeight / 2);
+    sf::Vector2f spawnPos(screenWidth / 2, screenHeight / 2);
     sf::Vector2f screen(screenWidth, screenHeight);
 
+    //! Screen dimensions must be divisable by heatmap resolution!
     swt::HeatMap toFood(4, screen, sf::Color(140, 255, 0));
     toFood.UpdateVisualMap();
     swt::HeatMap toHome(4, screen, sf::Color(0, 140, 255));
     toHome.UpdateVisualMap();
 
+    //! Screen dimensions must be divisable by heatmap resolution!
     swt::HeatMap homeSource(64, screen, sf::Color(0, 5, 140));
     homeSource.UpdateVisualMap();
     swt::HeatMap foodSource(64, screen, sf::Color(0, 80, 30));
-    // toFood.AddHeat(sf::Vector2f(300, 300), 20000);
     foodSource.UpdateVisualMap();
 
-    swt::SwarmAgent ant1(sf::Color::Black, sf::Vector2f(10, 20), pos, screen, OBEDIENCE);
+    swt::SwarmAgent ant1(sf::Color::Black, sf::Vector2f(10, 20), spawnPos, screen, OBEDIENCE);
     ant1.SetPheromoneMaps(toHome, toFood);
-    ant1.SetSourceMaps(homeSource, foodSource, PHEROMONE_DEPLETION);
+    ant1.SetSourceMaps(homeSource, foodSource, PHEROMONE_DEPLETION, MAX_PHEROMONE);
     ant1.SetMovementNoisePR(9, MOVEMENT_NOISE, 23);
     swt::Colony antColony(COLONY_SIZE, ant1);
 
-    // ? Quad clockwise vertex pattern
-    // arr[0].position = sf::Vector2f(240, 240);
-    // arr[1].position = sf::Vector2f(240, 340);
-    // arr[2].position = sf::Vector2f(340, 340);
-    // arr[3].position = sf::Vector2f(340, 240);
     sf::Clock clock;
     float deltaTime;
     char paint;
@@ -69,8 +64,8 @@ int main(int, char **)
     while (window.isOpen())
     {
         deltaTime = clock.restart().asSeconds();
-        // std::cout << deltaTime << std::endl;
         sf::Event ev;
+
         while (window.pollEvent(ev))
         {
             switch (ev.type)
@@ -94,19 +89,8 @@ int main(int, char **)
                 paint = 'd';
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
                 paint = 'r';
-            // else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            //     showMaps = !showMaps;
-            // else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-            //     showAnts = !showAnts;
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        {
-            ant1.rotate(-0.05);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        {
-            ant1.rotate(0.05);
-        }
+
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
             sf::Vector2i m = sf::Mouse::getPosition(window);
@@ -132,44 +116,33 @@ int main(int, char **)
                 }
         }
 
-        // TODO: Add pollrates to TickDown & UpdateVisualMap to improve performance
-        toFood.TickDown(PHEROMONE_DECAY * MOVE_STEPS, deltaTime);
-        toHome.TickDown(PHEROMONE_DECAY * MOVE_STEPS, deltaTime);
-        homeSource.UpdateVisualMap();
-        foodSource.UpdateVisualMap();
-        // std::cout << toHome.GetHeat(sf::Vector2f(500, 500)) << std::endl;
-
-        if (showMaps)
         {
-            /* code */
-            toFood.UpdateVisualMap();
-            toHome.UpdateVisualMap();
-        }
+            // TODO: Add pollrates to TickDown & UpdateVisualMap to improve performance
+            toFood.TickDown(PHEROMONE_DECAY * MOVE_STEPS, deltaTime);
+            toHome.TickDown(PHEROMONE_DECAY * MOVE_STEPS, deltaTime);
+            antColony.TickMove(MOVE_STEPS, deltaTime);
 
-        //   hm.UpdateVisualMap();
-        //   std::cout << "Heat at target: " << hm.GetHeat(20, 60) << std::endl;
-        //   antColony.TickMoveThreaded(2.0f, 4);
-        antColony.TickMove(MOVE_STEPS, deltaTime);
-        // ant1.MoveForward(0.05f);
+            homeSource.UpdateVisualMap();
+            foodSource.UpdateVisualMap();
+            if (showMaps)
+            {
+                toFood.UpdateVisualMap();
+                toHome.UpdateVisualMap();
+            }
+        }
 
         window.clear(backColor);
-        // window.draw(ant1);
-        // window.draw(ant1.DebugRAntenna());
-        // window.draw(ant1.DebugLAntenna());
-        // window.draw(toHome);
-        // window.draw(toFood);
-        window.draw(homeSource);
-        window.draw(foodSource);
-        if (showMaps)
         {
-            window.draw(toHome);
-            window.draw(toFood);
+            window.draw(homeSource);
+            window.draw(foodSource);
+            if (showMaps)
+            {
+                window.draw(toHome);
+                window.draw(toFood);
+            }
+            if (showAnts)
+                window.draw(antColony);
         }
-        if (showAnts)
-            window.draw(antColony);
-        //    window.draw(hm);
-        //    window.draw(arr);
-
         window.display();
     }
 }
