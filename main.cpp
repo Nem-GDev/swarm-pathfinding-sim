@@ -20,6 +20,16 @@ constexpr float
 
 int main(int, char **)
 {
+    //-------------------------
+    //? CONTROLS:
+    // H: Home (set)
+    // F: Food (set)
+    // S: Show paths
+    // A: Show ants
+    // D: Custom home path
+    // R: Custom food path
+    //-------------------------
+
     std::cout << "Hello, from swarm-pathfinding-sim!\n";
     sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight),
                             "SFML Basics", sf::Style::Close | sf::Style::Titlebar);
