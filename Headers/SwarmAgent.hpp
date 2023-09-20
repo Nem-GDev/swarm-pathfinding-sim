@@ -12,22 +12,23 @@ namespace swt
         sf::Transformable rAntenna;
         bool xOutOfBounds, yOutOfBounds, hasMovementNoise = false;
         float screenWidth, screenHeight, movementNoiseStrength, obedience, currentPheromoneRange, pheromoneDepletion;
-        float maxPheromone = 6000;
+        float maxPheromone = 8000;
         double pherDeduct;
         int movementNoisePR = 0, currentMovementNoisePoll = 0, movementNoiseDirections = 0;
         HeatMap *toHome, *toFood, *homeSource, *foodSource;
         enum Pheromone
         {
             DepartingHome = 1,
-            FoundFood = 2
+            FoundFood = 2,
+            Lost = 3,
         };
-        Pheromone currentPheromone = Pheromone::DepartingHome;
+        Pheromone currentPheromone = Pheromone::Lost;
         void CalculateForward();
         void CheckScreenBounds(float screenX, float screenY);
-        void AddMovementNoise(float dt);
+        void AddMovementNoise(float steps, float dt);
         void FollowMap(float strength, float dt);
         void ScanForSource();
-        void EmitPheromone(float dt);
+        void EmitPheromone(float steps, float dt);
 
     public:
         int seed;

@@ -12,6 +12,7 @@ using namespace swt;
 SwarmAgent::SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position, sf::Vector2f screenSize, float obedience)
 {
     this->obedience = obedience;
+    this->currentPheromoneRange = maxPheromone;
     // this->toFood = &hm;
     this->setSize(size);
     this->setPosition(position);
@@ -33,7 +34,7 @@ void SwarmAgent::MoveForward(float steps, float dt)
     {
         currentMovementNoisePoll++;
         if (currentMovementNoisePoll >= movementNoisePR)
-            AddMovementNoise(dt);
+            AddMovementNoise(steps, dt);
     }
     FollowMap(obedience, dt);
 
@@ -48,7 +49,7 @@ void SwarmAgent::MoveForward(float steps, float dt)
     CheckScreenBounds(screenWidth, screenHeight);
 
     ScanForSource();
-    EmitPheromone(dt);
+    EmitPheromone(steps, dt);
 }
 
 void SwarmAgent::CalculateForward()
@@ -97,14 +98,14 @@ void SwarmAgent::SetMovementNoisePR(int pollRate, float strength, int directions
     movementNoiseDirections = directions;
 }
 
-void SwarmAgent::AddMovementNoise(float dt)
+void SwarmAgent::AddMovementNoise(float steps, float dt)
 {
     currentMovementNoisePoll = 0;
     srand(unsigned(seed * (int)time(NULL)));
     int x = rand();
     float change = (x % movementNoiseDirections) * movementNoiseStrength;
     change = ((x % 2) == 0) ? change * -1 : change * 1;
-    this->rotate(change * dt);
+    this->rotate(change * dt * steps);
 }
 
 void SwarmAgent::FollowMap(float strength, float dt)
@@ -115,12 +116,12 @@ void SwarmAgent::FollowMap(float strength, float dt)
     short lPheromones;
     short rPheromones;
 
-    if (currentPheromone == Pheromone::DepartingHome)
+    if (currentPheromone != Pheromone::FoundFood)
     {
         lPheromones = toFood->GetHeat(lPos);
         rPheromones = toFood->GetHeat(rPos);
     }
-    else if (currentPheromone == Pheromone::FoundFood)
+    if (currentPheromone != Pheromone::DepartingHome)
     {
         lPheromones = toHome->GetHeat(lPos);
         rPheromones = toHome->GetHeat(rPos);
@@ -150,27 +151,30 @@ void SwarmAgent::ScanForSource()
     homeSourceFoundL = homeSource->GetHeat(lPos);
     homeSourceFoundR = homeSource->GetHeat(rPos);
 
-    if (foodSourceFoundL > 0 && foodSourceFoundR > 0)
+    if (foodSourceFoundL > 0 || foodSourceFoundR > 0)
     {
-        if (currentPheromone == Pheromone::DepartingHome)
+        if (currentPheromone != Pheromone::FoundFood)
             this->rotate(180);
         currentPheromone = Pheromone::FoundFood;
         currentPheromoneRange = maxPheromone;
     }
-    else if (homeSourceFoundL > 0 && homeSourceFoundR > 0)
+    else if (homeSourceFoundL || 0 && homeSourceFoundR > 0)
     {
-        if (currentPheromone == Pheromone::FoundFood)
+        if (currentPheromone == Pheromone::DepartingHome)
             this->rotate(180);
         currentPheromone = Pheromone::DepartingHome;
         currentPheromoneRange = maxPheromone;
     }
 }
 
-void SwarmAgent::EmitPheromone(float dt)
+void SwarmAgent::EmitPheromone(float steps, float dt)
 {
-    pherDeduct = currentPheromoneRange - dt * (double)pheromoneDepletion;
+    if (currentPheromone == Pheromone::Lost)
+        return;
+    pherDeduct = currentPheromoneRange - dt * steps * (double)pheromoneDepletion;
     currentPheromoneRange = std::max(0, (int)pherDeduct);
-    // std::cout << (short)currentPheromoneRange << std::endl;
+    if (currentPheromoneRange == 0)
+        currentPheromone = Pheromone::Lost;
     if (currentPheromone == Pheromone::DepartingHome)
     {
         toHome->AddHeat(this->getPosition(), (short)currentPheromoneRange);
