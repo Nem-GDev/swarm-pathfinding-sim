@@ -6,7 +6,7 @@
 #include "SwarmPreset.hpp"
 #include "ThemePreset.hpp"
 
-swt::SwarmPreset preset = swt::PRESET_1;
+swt::SwarmPreset preset = swt::PRESET_MASSIVE2;
 swt::ThemePreset theme = swt::THEME_2;
 
 sf::Vector2f spawnPosition(preset.SCREEN_WIDTH / 2, preset.SCREEN_HEIGHT / 2);

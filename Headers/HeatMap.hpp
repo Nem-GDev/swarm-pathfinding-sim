@@ -11,7 +11,7 @@ namespace swt
     private:
         short mapPrecision, screenWidth, screenHeight;
         short mapWidth, mapHeight, visualMapWidth, visualMapHeight, mapWRange, mapHRange;
-        int mapSize, visualMapSize, currentVisualPoll = 0, maxVisualPoll = 1;
+        int mapSize, visualMapSize, currentVisualPoll = 0, maxVisualPoll = 1, visualAlphaCulling = 0;
         double alphaConversion;
 
         std::vector<std::vector<short>> map;

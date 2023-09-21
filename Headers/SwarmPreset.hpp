@@ -3,8 +3,15 @@
 
 namespace swt
 {
+    //* NOTES:
+    //*  Lower (screenwidth/swarmwidth) = Lower speed
+    //*  Lower speed = Lower obedience =  Higher noise
+    //*  Higher (MaxPheromone/Depletion) = Higher range
+    //*  Higher MaxPheromone = Less Unity = Less clarity = Less accuracy= Faster update/refresh/regeneration
     struct SwarmPreset
     {
+        const int VISUALMAP_POLLRATE;
+        const int VISUALMAP_ALPHACULLING;
         const int SCREEN_WIDTH;
         const int SCREEN_HEIGHT;
         //! Screen dimensions must be divisable by heatmap resolution!
@@ -28,6 +35,8 @@ namespace swt
         const int SWARM_NOISE_DIRECTIONS;
     };
     static constexpr SwarmPreset PRESET_CUSTOM{
+        1,    // VISUALMAP_POLLRATE;
+        0,    // VISUALMAP_ALPHACULLING;
         1024, // SCREEN_WIDTH;
         1024, // SCREEN_HEIGHT;
         32,   // HEATMAP_SOURCE_RESOLUTION;
@@ -47,6 +56,8 @@ namespace swt
     };
 
     static constexpr SwarmPreset PRESET_1{
+        1,   // VISUALMAP_POLLRATE;
+        0,   // VISUALMAP_ALPHACULLING;
         896, // SCREEN_WIDTH;
         896, // SCREEN_HEIGHT;
         64,  // HEATMAP_SOURCE_RESOLUTION;
@@ -65,6 +76,8 @@ namespace swt
         23     // SWARM_NOISE_DIRECTIONS;
     };
     static constexpr SwarmPreset PRESET_2{
+        1,   // VISUALMAP_POLLRATE;
+        0,   // VISUALMAP_ALPHACULLING;
         896, // SCREEN_WIDTH;
         896, // SCREEN_HEIGHT;
         64,  // HEATMAP_SOURCE_RESOLUTION;
@@ -84,6 +97,8 @@ namespace swt
     };
 
     static constexpr SwarmPreset PRESET_3{
+        1,   // VISUALMAP_POLLRATE;
+        0,   // VISUALMAP_ALPHACULLING;
         896, // SCREEN_WIDTH;
         896, // SCREEN_HEIGHT;
         64,  // HEATMAP_SOURCE_RESOLUTION;
@@ -102,6 +117,8 @@ namespace swt
         23     // SWARM_NOISE_DIRECTIONS;
     };
     static constexpr SwarmPreset PRESET_LARGE1{
+        5,    // VISUALMAP_POLLRATE;
+        0,    // VISUALMAP_ALPHACULLING;
         1024, // SCREEN_WIDTH;
         1024, // SCREEN_HEIGHT;
         64,   // HEATMAP_SOURCE_RESOLUTION;
@@ -120,6 +137,8 @@ namespace swt
         23     // SWARM_NOISE_DIRECTIONS;
     };
     static constexpr SwarmPreset PRESET_MASSIVE1{
+        15,   // VISUALMAP_POLLRATE;
+        30,   // VISUALMAP_ALPHACULLING;
         1024, // SCREEN_WIDTH;
         1024, // SCREEN_HEIGHT;
         32,   // HEATMAP_SOURCE_RESOLUTION;
@@ -127,14 +146,34 @@ namespace swt
         4,    // SWARM_WIDTH
         8,    // SWARM_HEIGHT;
 
-        1200,  // COLONY_SIZE;
-        300,   // SWARM_OBEDIENCE;h
-        12000, // SWARM_MAX_PHEROMONE;
-        8,     // SWARM_PHEROMONE_DEPLETION;
-        8,     // SWARM_PHEROMONE_DECAY;
-        50,    // SWARM_MOVE_STEPS;
-        0.15f, // SWARM_NOISE;
-        9,     // SWARM_NOISE_POLLRATE;
-        23     // SWARM_NOISE_DIRECTIONS;
+        600,  // COLONY_SIZE;
+        400,  // SWARM_OBEDIENCE;h
+        6000, // SWARM_MAX_PHEROMONE;
+        5.f,  // SWARM_PHEROMONE_DEPLETION;
+        5.f,  // SWARM_PHEROMONE_DECAY;
+        50,   // SWARM_MOVE_STEPS;
+        0.3f, // SWARM_NOISE;
+        9,    // SWARM_NOISE_POLLRATE;
+        23    // SWARM_NOISE_DIRECTIONS;
+    };
+    static constexpr SwarmPreset PRESET_MASSIVE2{
+        15,   // VISUALMAP_POLLRATE;
+        120,  // VISUALMAP_ALPHACULLING;
+        1024, // SCREEN_WIDTH;
+        1024, // SCREEN_HEIGHT;
+        32,   // HEATMAP_SOURCE_RESOLUTION;
+        2,    // HEATMAP_PATH_RESOLUTION;
+        4,    // SWARM_WIDTH
+        8,    // SWARM_HEIGHT;
+
+        600,  // COLONY_SIZE;h
+        400,  // SWARM_OBEDIENCE;h
+        1200, // SWARM_MAX_PHEROMONE;
+        1.f,  // SWARM_PHEROMONE_DEPLETION;
+        1.f,  // SWARM_PHEROMONE_DECAY;
+        50,   // SWARM_MOVE_STEPS;
+        0.3f, // SWARM_NOISE;
+        9,    // SWARM_NOISE_POLLRATE;
+        23    // SWARM_NOISE_DIRECTIONS;
     };
 }

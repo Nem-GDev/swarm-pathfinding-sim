@@ -29,6 +29,8 @@ HeatMap::HeatMap(swt::HeatMap::HeatMapType hmType, swt::SwarmPreset &preset, swt
         this->mapPrecision = preset.HEATMAP_SOURCE_RESOLUTION;
         break;
     }
+    this->visualAlphaCulling = preset.VISUALMAP_ALPHACULLING;
+    this->maxVisualPoll = preset.VISUALMAP_POLLRATE;
     this->alphaConversion = 255.00 / 32000.00;
     this->screenWidth = preset.SCREEN_WIDTH;
     this->screenHeight = preset.SCREEN_HEIGHT;
@@ -238,6 +240,8 @@ void HeatMap::UpdateVisualMap()
             // 0 1 2 3, 4 5 6 7...
             tempColor = visualMap[currentFirst].color;
             int convertedAlpha = map[j][i] * alphaConversion;
+            if (convertedAlpha < visualAlphaCulling)
+                convertedAlpha = 0;
 
             tempColor.a = std::min(255, convertedAlpha);
             visualMap[currentFirst].color = tempColor;
