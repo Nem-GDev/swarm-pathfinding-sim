@@ -7,7 +7,7 @@
 #include "ThemePreset.hpp"
 
 swt::SwarmPreset preset = swt::PRESET_1;
-swt::ThemePreset theme = swt::THEME_1;
+swt::ThemePreset theme = swt::THEME_2;
 
 sf::Vector2f spawnPosition(preset.SCREEN_WIDTH / 2, preset.SCREEN_HEIGHT / 2);
 
@@ -26,6 +26,7 @@ int main(int, char **)
     sf::Vector2f screen(preset.SCREEN_WIDTH, preset.SCREEN_HEIGHT);
     sf::RenderWindow window(sf::VideoMode(preset.SCREEN_WIDTH, preset.SCREEN_HEIGHT),
                             "SFML Basics", sf::Style::Close | sf::Style::Titlebar);
+    window.setFramerateLimit(60);
 
     swt::HeatMap pathFood(swt::HeatMap::HeatMapType::FoodPath, preset, theme);
     swt::HeatMap pathHome(swt::HeatMap::HeatMapType::HomePath, preset, theme);
@@ -116,13 +117,13 @@ int main(int, char **)
         // Rendering objects
         window.clear(theme.BACK_COLOR);
         {
-            window.draw(homeSource);
-            window.draw(foodSource);
             if (showPathMaps)
             {
                 window.draw(pathHome);
                 window.draw(pathFood);
             }
+            window.draw(homeSource);
+            window.draw(foodSource);
             if (showAnts)
                 window.draw(antColony);
         }

@@ -29,14 +29,14 @@ namespace swt
         void CheckScreenBounds(float screenX, float screenY);
         void AddMovementNoise(float steps, float dt);
         void FollowMap(float strength, float dt);
-        void ScanForSource();
+        bool ScanForSource();
         void EmitPheromone(float steps, float dt);
 
     public:
         int seed;
         sf::RectangleShape DebugRAntenna();
         sf::RectangleShape DebugLAntenna();
-        SwarmAgent(sf::Vector2f position, swt::SwarmPreset &preset, swt::ThemePreset theme);
+        SwarmAgent(sf::Vector2f position, swt::SwarmPreset &preset, swt::ThemePreset &theme);
         void MoveForward(float step, float dt);
         void SetMovementNoisePR(int pollRate, float strength, int directions);
         void SetPheromoneMaps(HeatMap &toHome, HeatMap &toFood);

@@ -23,4 +23,13 @@ namespace swt
         sf::Color(0, 5, 140)     // HOME_SOURCE_COLOR
 
     };
+    static ThemePreset THEME_2{
+        sf::Color(189, 255, 248), // BACK_COLOR
+        sf::Color(255, 255, 255), // SWARM_COLOR
+        sf::Color(255, 0, 0),     // FOOD_PATH_COLOR
+        sf::Color(255, 0, 0),     // FOOD_SOURCE_COLOR
+        sf::Color(0, 255, 42),    // HOME_PATH_COLOR
+        sf::Color(0, 255, 42)     // HOME_SOURCE_COLOR
+
+    };
 }

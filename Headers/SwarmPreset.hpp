@@ -28,23 +28,24 @@ namespace swt
         const int SWARM_NOISE_DIRECTIONS;
     };
     static constexpr SwarmPreset PRESET_CUSTOM{
-        896, // SCREEN_WIDTH;
-        896, // SCREEN_HEIGHT;
-        64,  // HEATMAP_SOURCE_RESOLUTION;
-        4,   // HEATMAP_PATH_RESOLUTION;
-        10,  // SWARM_WIDTH
-        20,  // SWARM_HEIGHT;
+        1024, // SCREEN_WIDTH;
+        1024, // SCREEN_HEIGHT;
+        32,   // HEATMAP_SOURCE_RESOLUTION;
+        2,    // HEATMAP_PATH_RESOLUTION;
+        4,    // SWARM_WIDTH
+        8,    // SWARM_HEIGHT;
 
-        300,   // COLONY_SIZE;
-        600,   // SWARM_OBEDIENCE;
-        3000,  // SWARM_MAX_PHEROMONE;
-        2,     // SWARM_PHEROMONE_DEPLETION;
-        2,     // SWARM_PHEROMONE_DECAY;
-        200,   // SWARM_MOVE_STEPS;
-        0.15f, // SWARM_NOISE;
+        1200,  // COLONY_SIZE;
+        400,   // SWARM_OBEDIENCE;h
+        28000, // SWARM_MAX_PHEROMONE;
+        20,    // SWARM_PHEROMONE_DEPLETION;
+        20,    // SWARM_PHEROMONE_DECAY;
+        100,   // SWARM_MOVE_STEPS;
+        0.25f, // SWARM_NOISE;
         9,     // SWARM_NOISE_POLLRATE;
         23     // SWARM_NOISE_DIRECTIONS;
     };
+
     static constexpr SwarmPreset PRESET_1{
         896, // SCREEN_WIDTH;
         896, // SCREEN_HEIGHT;
@@ -96,6 +97,42 @@ namespace swt
         8,     // SWARM_PHEROMONE_DEPLETION;
         8,     // SWARM_PHEROMONE_DECAY;
         200,   // SWARM_MOVE_STEPS;
+        0.15f, // SWARM_NOISE;
+        9,     // SWARM_NOISE_POLLRATE;
+        23     // SWARM_NOISE_DIRECTIONS;
+    };
+    static constexpr SwarmPreset PRESET_LARGE1{
+        1024, // SCREEN_WIDTH;
+        1024, // SCREEN_HEIGHT;
+        64,   // HEATMAP_SOURCE_RESOLUTION;
+        4,    // HEATMAP_PATH_RESOLUTION;
+        8,    // SWARM_WIDTH
+        16,   // SWARM_HEIGHT;
+
+        900,   // COLONY_SIZE;
+        600,   // SWARM_OBEDIENCE;h
+        2000,  // SWARM_MAX_PHEROMONE;
+        2,     // SWARM_PHEROMONE_DEPLETION;
+        2,     // SWARM_PHEROMONE_DECAY;
+        200,   // SWARM_MOVE_STEPS;
+        0.15f, // SWARM_NOISE;
+        9,     // SWARM_NOISE_POLLRATE;
+        23     // SWARM_NOISE_DIRECTIONS;
+    };
+    static constexpr SwarmPreset PRESET_MASSIVE1{
+        1024, // SCREEN_WIDTH;
+        1024, // SCREEN_HEIGHT;
+        32,   // HEATMAP_SOURCE_RESOLUTION;
+        2,    // HEATMAP_PATH_RESOLUTION;
+        4,    // SWARM_WIDTH
+        8,    // SWARM_HEIGHT;
+
+        1200,  // COLONY_SIZE;
+        300,   // SWARM_OBEDIENCE;h
+        12000, // SWARM_MAX_PHEROMONE;
+        8,     // SWARM_PHEROMONE_DEPLETION;
+        8,     // SWARM_PHEROMONE_DECAY;
+        50,    // SWARM_MOVE_STEPS;
         0.15f, // SWARM_NOISE;
         9,     // SWARM_NOISE_POLLRATE;
         23     // SWARM_NOISE_DIRECTIONS;

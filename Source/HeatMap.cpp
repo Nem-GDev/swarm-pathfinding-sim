@@ -199,6 +199,14 @@ void HeatMap::InitVisualMap()
 
 void HeatMap::UpdateVisualMap()
 {
+    currentVisualPoll++;
+    if (currentVisualPoll > maxVisualPoll)
+    {
+        currentVisualPoll = 0;
+    }
+    else
+        return;
+
     sf::Vector2f v0(0, 0);
     sf::Vector2f v1(0, 0);
     sf::Vector2f v2(0, 0);

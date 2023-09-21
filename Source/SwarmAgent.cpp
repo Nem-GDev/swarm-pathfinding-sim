@@ -11,7 +11,7 @@
 
 using namespace swt;
 
-SwarmAgent::SwarmAgent(sf::Vector2f position, swt::SwarmPreset &preset, swt::ThemePreset theme)
+SwarmAgent::SwarmAgent(sf::Vector2f position, swt::SwarmPreset &preset, swt::ThemePreset &theme)
 {
     xOutOfBounds = false;
     yOutOfBounds = false;
@@ -34,15 +34,6 @@ SwarmAgent::SwarmAgent(sf::Vector2f position, swt::SwarmPreset &preset, swt::The
 // This method scope must be optimized
 void SwarmAgent::MoveForward(float steps, float dt)
 {
-    // rotations
-    if (hasMovementNoise)
-    {
-        currentMovementNoisePoll++;
-        if (currentMovementNoisePoll >= movementNoisePR)
-            AddMovementNoise(steps, dt);
-    }
-    FollowMap(obedience, dt);
-
     // forward calculation and movement
     CalculateForward();
     this->move(nForward * steps * dt);
@@ -53,8 +44,14 @@ void SwarmAgent::MoveForward(float steps, float dt)
     // collision / out of bounds detection
     CheckScreenBounds(screenWidth, screenHeight);
 
-    // Pheromones & pathing
-    ScanForSource();
+    // Pheromones, pathing & noise
+    if (!ScanForSource())
+    {
+        currentMovementNoisePoll++;
+        if (currentMovementNoisePoll >= movementNoisePR)
+            AddMovementNoise(steps, dt);
+        FollowMap(obedience, dt);
+    }
     EmitPheromone(steps, dt);
 }
 
@@ -117,10 +114,6 @@ void SwarmAgent::AddMovementNoise(float steps, float dt)
 void SwarmAgent::FollowMap(float strength, float dt)
 {
     //! Note: For correct behavior resolution of heatmap needs to be smaller than ant width
-    // sf::Vector2f lPos(lAntenna.getPosition());
-    // sf::Vector2f rPos(rAntenna.getPosition());
-    // short lPheromones;
-    // short rPheromones;
     sf::Vector2f lPos(lAntenna.getPosition());
     sf::Vector2f rPos(rAntenna.getPosition());
     short foodPathFoundL;
@@ -174,19 +167,11 @@ void SwarmAgent::FollowMap(float strength, float dt)
             this->rotate(strength * dt);
         }
     }
-
-    // if (lPheromones > rPheromones)
-    // {
-    //     this->rotate(-strength * dt);
-    // }
-    // else if (rPheromones > lPheromones)
-    // {
-    //     this->rotate(strength * dt);
-    // }
 }
 
-void SwarmAgent::ScanForSource()
+bool SwarmAgent::ScanForSource()
 {
+    bool sourceFound = false;
     sf::Vector2f lPos(lAntenna.getPosition());
     sf::Vector2f rPos(rAntenna.getPosition());
     short foodSourceFoundL;
@@ -205,14 +190,17 @@ void SwarmAgent::ScanForSource()
             this->rotate(180);
         currentPheromone = Pheromone::FoundFood;
         currentPheromoneRange = maxPheromone;
+        sourceFound = true;
     }
-    else if (homeSourceFoundL || 0 && homeSourceFoundR > 0)
+    else if (homeSourceFoundL > 0 || homeSourceFoundR > 0)
     {
         if (currentPheromone != Pheromone::DepartingHome)
             this->rotate(180);
         currentPheromone = Pheromone::DepartingHome;
         currentPheromoneRange = maxPheromone;
+        sourceFound = true;
     }
+    return sourceFound;
 }
 
 void SwarmAgent::EmitPheromone(float steps, float dt)
