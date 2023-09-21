@@ -1,5 +1,5 @@
 #include "HeatMap.hpp"
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
 #include "SwarmPreset.hpp"

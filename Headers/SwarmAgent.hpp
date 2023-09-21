@@ -1,5 +1,5 @@
 #pragma once
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "HeatMap.hpp"
 #include "SwarmPreset.hpp"
 #include "ThemePreset.hpp"

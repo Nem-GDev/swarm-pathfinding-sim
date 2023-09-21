@@ -1,8 +1,8 @@
 #include <iostream>
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "SwarmAgent.hpp"
 #include "Colony.hpp"
-#include "Heatmap.hpp"
+#include "HeatMap.hpp"
 #include "SwarmPreset.hpp"
 #include "ThemePreset.hpp"
 

@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES
 
 #include <iostream>
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <cmath>
 #include "SwarmAgent.hpp"
 #include "HeatMap.hpp"
