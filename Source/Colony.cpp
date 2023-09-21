@@ -5,14 +5,16 @@
 #include <sstream>
 #include <time.h>
 #include "HeatMap.hpp"
+#include "SwarmPreset.hpp"
+#include "ThemePreset.hpp"
 
 using namespace swt;
 
-Colony::Colony(int count, swt::SwarmAgent agentTemplate)
+Colony::Colony(swt::SwarmPreset preset, swt::SwarmAgent agentTemplate)
 {
-    colonySize = count;
-    float angleIncrement = 360.0f / count;
-    for (int i = 0; i < count; i++)
+    colonySize = preset.COLONY_SIZE;
+    float angleIncrement = 360.0f / colonySize;
+    for (int i = 0; i < colonySize; i++)
     {
         SwarmAgent tempAgent(agentTemplate);
         tempAgent.setRotation(i * angleIncrement);

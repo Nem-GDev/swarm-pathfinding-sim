@@ -2,10 +2,53 @@
 #include <SFML\Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include "SwarmPreset.hpp"
+#include "ThemePreset.hpp"
 
 using namespace swt;
 
-//! Screen dimensions must be divisable by heatmap resolution!
+//! SWARMSIM CONSTRUCTOR
+HeatMap::HeatMap(swt::HeatMap::HeatMapType hmType, swt::SwarmPreset &preset, swt::ThemePreset &theme)
+{
+    switch (hmType)
+    {
+    case HeatMapType::HomeSource:
+        this->baseHeatColor = theme.HOME_SOURCE_COLOR;
+        this->mapPrecision = preset.HEATMAP_SOURCE_RESOLUTION;
+        break;
+    case HeatMapType::HomePath:
+        this->baseHeatColor = theme.HOME_PATH_COLOR;
+        this->mapPrecision = preset.HEATMAP_PATH_RESOLUTION;
+        break;
+    case HeatMapType::FoodPath:
+        this->baseHeatColor = theme.FOOD_PATH_COLOR;
+        this->mapPrecision = preset.HEATMAP_PATH_RESOLUTION;
+        break;
+    case HeatMapType::FoodSource:
+        this->baseHeatColor = theme.FOOD_SOURCE_COLOR;
+        this->mapPrecision = preset.HEATMAP_SOURCE_RESOLUTION;
+        break;
+    }
+    this->alphaConversion = 255.00 / 32000.00;
+    this->screenWidth = preset.SCREEN_WIDTH;
+    this->screenHeight = preset.SCREEN_HEIGHT;
+    this->mapWidth = screenWidth / mapPrecision;
+    this->mapHeight = screenHeight / mapPrecision;
+    this->map.resize(mapHeight, std::vector<short>(mapWidth, 0));
+    this->mapSize = mapWidth * mapHeight;
+    this->mapWRange = mapWidth - 1;
+    this->mapHRange = mapHeight - 1;
+    this->visualMapWidth = mapWidth * 4;
+    this->visualMapSize = mapSize * 4;
+    this->visualMap.setPrimitiveType(sf::Quads);
+    this->visualMap.resize(visualMapSize);
+    std::cout << "\nHeatmap: " << mapWidth << "x" << mapHeight << std::endl;
+    std::cout << "Map size: " << mapSize << std::endl;
+    std::cout << "Visual map size: " << visualMapSize << std::endl;
+    InitVisualMap();
+}
+
+//! GENERIC CONSTRUCTOR
 HeatMap::HeatMap(int resolution, sf::Vector2f screen, sf::Color heatColor)
 {
     this->alphaConversion = 255.00 / 32000.00;
@@ -28,24 +71,6 @@ HeatMap::HeatMap(int resolution, sf::Vector2f screen, sf::Color heatColor)
     std::cout << "\nHeatmap: " << mapWidth << "x" << mapHeight << std::endl;
     std::cout << "Map size: " << mapSize << std::endl;
     std::cout << "Visual map size: " << visualMapSize << std::endl;
-
-    // Sample Iteration through visual map.
-    int b = 0;
-    for (int i = 0; i < mapHeight; i++)
-    {
-        // i = which row we are on
-        for (int j = 0; j < mapWidth; j++)
-        {
-            // j which column to edit
-            for (int k = 0; k < 4; k++)
-            {
-                // 4 grouped vertices corresponding to each Quad
-                b++;
-            }
-        }
-    }
-    std::cout << "Iterated times: " << b << std::endl;
-
     InitVisualMap();
 }
 
@@ -108,6 +133,23 @@ void HeatMap::InitVisualMap()
     // arr[2].position = sf::Vector2f(340, 340);
     // arr[3].position = sf::Vector2f(340, 240);
 
+    // ? Sample Iteration through visual map.
+    // int b = 0;
+    // for (int i = 0; i < mapHeight; i++)
+    // {
+    //     // i = which row we are on
+    //     for (int j = 0; j < mapWidth; j++)
+    //     {
+    //         // j which column to edit
+    //         for (int k = 0; k < 4; k++)
+    //         {
+    //             // 4 grouped vertices corresponding to each Quad
+    //             b++;
+    //         }
+    //     }
+    // }
+    // std::cout << "Iterated times: " << b << std::endl;
+
     std::cout << "Initing" << std::endl;
     sf::Vector2f v0(0, 0);
     sf::Vector2f v1(0, 0);
@@ -152,6 +194,7 @@ void HeatMap::InitVisualMap()
             ++currentFirst;
         }
     }
+    UpdateVisualMap();
 }
 
 void HeatMap::UpdateVisualMap()

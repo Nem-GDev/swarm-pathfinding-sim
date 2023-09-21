@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include "HeatMap.hpp"
+#include "SwarmPreset.hpp"
+#include "ThemePreset.hpp"
 
 namespace swt
 {
@@ -34,11 +36,11 @@ namespace swt
         int seed;
         sf::RectangleShape DebugRAntenna();
         sf::RectangleShape DebugLAntenna();
-        SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position, sf::Vector2f screenSize, float obedience);
+        SwarmAgent(sf::Vector2f position, swt::SwarmPreset &preset, swt::ThemePreset theme);
         void MoveForward(float step, float dt);
         void SetMovementNoisePR(int pollRate, float strength, int directions);
         void SetPheromoneMaps(HeatMap &toHome, HeatMap &toFood);
-        void SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource, float pheromoneDepletion, float maxPheromone);
+        void SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource);
     };
 
 }

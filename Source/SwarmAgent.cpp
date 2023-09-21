@@ -5,24 +5,30 @@
 #include <cmath>
 #include "SwarmAgent.hpp"
 #include "HeatMap.hpp"
+#include "SwarmPreset.hpp"
+#include "ThemePreset.hpp"
 #include <time.h>
 
 using namespace swt;
 
-SwarmAgent::SwarmAgent(sf::Color color, sf::Vector2f size, sf::Vector2f position, sf::Vector2f screenSize, float obedience)
+SwarmAgent::SwarmAgent(sf::Vector2f position, swt::SwarmPreset &preset, swt::ThemePreset theme)
 {
-    this->obedience = obedience;
-    this->currentPheromoneRange = maxPheromone;
-    this->setSize(size);
-    this->setPosition(position);
-    this->setFillColor(color);
-    screenWidth = screenSize.x;
-    screenHeight = screenSize.y;
-    sf::Vector2f origin((float)size.x / 2, (float)size.y / 2);
-    this->setOrigin(origin);
-    CalculateForward();
     xOutOfBounds = false;
     yOutOfBounds = false;
+    this->obedience = preset.SWARM_OBEDIENCE;
+    this->setSize(sf::Vector2f(preset.SWARM_WIDTH, preset.SWARM_HEIGHT));
+    this->setPosition(position);
+    this->setFillColor(theme.SWARM_COLOR);
+    screenWidth = preset.SCREEN_WIDTH;
+    screenHeight = preset.SCREEN_HEIGHT;
+    sf::Vector2f origin((float)preset.SWARM_WIDTH / 2, (float)preset.SWARM_HEIGHT / 2);
+    this->setOrigin(origin);
+    currentPheromoneRange = 0;
+    this->pheromoneDepletion = preset.SWARM_PHEROMONE_DEPLETION;
+    this->maxPheromone = preset.SWARM_MAX_PHEROMONE;
+
+    SetMovementNoisePR(preset.SWARM_NOISE_POLLRATE, preset.SWARM_NOISE, preset.SWARM_NOISE_DIRECTIONS);
+    CalculateForward();
 }
 
 // This method scope must be optimized
@@ -233,13 +239,10 @@ void SwarmAgent::SetPheromoneMaps(HeatMap &toHome, HeatMap &toFood)
     this->toFood = &toFood;
 }
 
-void SwarmAgent::SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource, float pheromoneDepletion, float maxPheromone)
+void SwarmAgent::SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource)
 {
     this->homeSource = &homeSource;
     this->foodSource = &foodSource;
-    this->pheromoneDepletion = pheromoneDepletion;
-    this->maxPheromone = maxPheromone;
-    currentPheromoneRange = maxPheromone;
 }
 
 sf::RectangleShape SwarmAgent::DebugRAntenna()

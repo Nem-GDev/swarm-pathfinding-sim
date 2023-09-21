@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include <vector>
+#include "SwarmPreset.hpp"
+#include "ThemePreset.hpp"
 
 namespace swt
 {
@@ -18,8 +20,16 @@ namespace swt
         void InitVisualMap();
 
     public:
+        static enum HeatMapType {
+            FoodPath,
+            FoodSource,
+            HomePath,
+            HomeSource,
+        };
+        HeatMapType hmType;
         sf::Color baseHeatColor;
         HeatMap(int resolution, sf::Vector2f screen, sf::Color heatColor);
+        HeatMap(swt::HeatMap::HeatMapType hmType, swt::SwarmPreset &preset, swt::ThemePreset &theme);
         void AddHeat(sf::Vector2f point, short value);
         short GetHeat(sf::Vector2f point);
         void TickDown(float strength, float dt);
