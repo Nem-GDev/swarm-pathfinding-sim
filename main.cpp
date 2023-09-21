@@ -6,7 +6,7 @@
 #include "SwarmPreset.hpp"
 #include "ThemePreset.hpp"
 
-swt::SwarmPreset preset = swt::PRESET_MASSIVE2;
+swt::SwarmPreset preset = swt::PRESET_MASSIVE3;
 swt::ThemePreset theme = swt::THEME_2;
 
 sf::Vector2f spawnPosition(preset.SCREEN_WIDTH / 2, preset.SCREEN_HEIGHT / 2);
@@ -15,6 +15,7 @@ sf::Vector2f spawnPosition(preset.SCREEN_WIDTH / 2, preset.SCREEN_HEIGHT / 2);
 //? CONTROLS:
 //  H: Home (set)
 //  F: Food (set)
+//  C: Remove Source (Food/Home)
 //  S: Show paths
 //  A: Show ants
 //  D: Custom home path
@@ -73,6 +74,8 @@ int main(int, char **)
             paint = 'd';
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
             paint = 'r';
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+            paint = 'c';
 
         // Painting w/ LMB
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -93,6 +96,10 @@ int main(int, char **)
                     break;
                 case 'r':
                     pathFood.AddHeat(sf::Vector2f(m.x, m.y), 32000);
+                    break;
+                case 'c':
+                    foodSource.AddHeat(sf::Vector2f(m.x, m.y), -32000);
+                    homeSource.AddHeat(sf::Vector2f(m.x, m.y), -32000);
                     break;
 
                 default:

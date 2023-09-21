@@ -176,4 +176,24 @@ namespace swt
         9,    // SWARM_NOISE_POLLRATE;
         23    // SWARM_NOISE_DIRECTIONS;
     };
+    static constexpr SwarmPreset PRESET_MASSIVE3{
+        15,   // VISUALMAP_POLLRATE;
+        120,  // VISUALMAP_ALPHACULLING;
+        1024, // SCREEN_WIDTH;
+        1024, // SCREEN_HEIGHT;
+        32,   // HEATMAP_SOURCE_RESOLUTION;
+        2,    // HEATMAP_PATH_RESOLUTION;
+        4,    // SWARM_WIDTH
+        8,    // SWARM_HEIGHT;
+
+        1200, // COLONY_SIZE;h
+        400,  // SWARM_OBEDIENCE;h
+        4800, // SWARM_MAX_PHEROMONE;
+        4.f,  // SWARM_PHEROMONE_DEPLETION;
+        8.f,  // SWARM_PHEROMONE_DECAY;
+        50,   // SWARM_MOVE_STEPS;
+        0.3f, // SWARM_NOISE;
+        9,    // SWARM_NOISE_POLLRATE;
+        23    // SWARM_NOISE_DIRECTIONS;
+    };
 }
