@@ -25,6 +25,7 @@ namespace swt
             FoodSource,
             HomePath,
             HomeSource,
+            Walls
         };
         HeatMapType hmType;
         sf::Color baseHeatColor;

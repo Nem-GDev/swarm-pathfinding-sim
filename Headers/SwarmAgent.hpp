@@ -17,7 +17,7 @@ namespace swt
         float maxPheromone = 1500;
         double pherDeduct;
         int movementNoisePR = 0, currentMovementNoisePoll = 0, movementNoiseDirections = 0;
-        HeatMap *toHome, *toFood, *homeSource, *foodSource;
+        HeatMap *toHome, *toFood, *homeSource, *foodSource, *walls;
         enum Pheromone
         {
             DepartingHome = 1,
@@ -29,8 +29,9 @@ namespace swt
         void CheckScreenBounds(float screenX, float screenY);
         void AddMovementNoise(float steps, float dt);
         void FollowMap(float strength, float dt);
-        bool ScanForSource();
+        bool ScanHeatMaps();
         void EmitPheromone(float steps, float dt);
+        void ReflectOffWall(char sideHit);
 
     public:
         int seed;
@@ -40,7 +41,7 @@ namespace swt
         void MoveForward(float step, float dt);
         void SetMovementNoisePR(int pollRate, float strength, int directions);
         void SetPheromoneMaps(HeatMap &toHome, HeatMap &toFood);
-        void SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource);
+        void SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource, HeatMap &walls);
     };
 
 }

@@ -12,6 +12,7 @@ namespace swt
         const sf::Color FOOD_SOURCE_COLOR;
         const sf::Color HOME_PATH_COLOR;
         const sf::Color HOME_SOURCE_COLOR;
+        const sf::Color WALLS_COLOR;
     };
 
     static ThemePreset THEME_1{
@@ -20,8 +21,8 @@ namespace swt
         sf::Color(140, 255, 0),  // FOOD_PATH_COLOR
         sf::Color(0, 80, 30),    // FOOD_SOURCE_COLOR
         sf::Color(0, 140, 255),  // HOME_PATH_COLOR
-        sf::Color(0, 5, 140)     // HOME_SOURCE_COLOR
-
+        sf::Color(0, 5, 140),    // HOME_SOURCE_COLOR
+        sf::Color::Black         // WALLS_COLOR;
     };
     static ThemePreset THEME_2{
         sf::Color(189, 255, 248), // BACK_COLOR
@@ -29,7 +30,7 @@ namespace swt
         sf::Color(255, 0, 0),     // FOOD_PATH_COLOR
         sf::Color(255, 0, 0),     // FOOD_SOURCE_COLOR
         sf::Color(0, 255, 42),    // HOME_PATH_COLOR
-        sf::Color(0, 255, 42)     // HOME_SOURCE_COLOR
-
+        sf::Color(0, 255, 42),    // HOME_SOURCE_COLOR
+        sf::Color::Black          // WALLS_COLOR;
     };
 }

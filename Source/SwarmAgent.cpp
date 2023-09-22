@@ -45,7 +45,7 @@ void SwarmAgent::MoveForward(float steps, float dt)
     CheckScreenBounds(screenWidth, screenHeight);
 
     // Pheromones, pathing & noise
-    if (!ScanForSource())
+    if (!ScanHeatMaps())
     {
         currentMovementNoisePoll++;
         if (currentMovementNoisePoll >= movementNoisePR)
@@ -169,22 +169,37 @@ void SwarmAgent::FollowMap(float strength, float dt)
     }
 }
 
-bool SwarmAgent::ScanForSource()
+bool SwarmAgent::ScanHeatMaps()
 {
     bool sourceFound = false;
     sf::Vector2f lPos(lAntenna.getPosition());
     sf::Vector2f rPos(rAntenna.getPosition());
+    sf::Vector2f oPos(getPosition());
     short foodSourceFoundL;
     short foodSourceFoundR;
     short homeSourceFoundL;
     short homeSourceFoundR;
+    short wallFoundL;
+    short wallFoundR;
 
     foodSourceFoundL = foodSource->GetHeat(lPos);
     foodSourceFoundR = foodSource->GetHeat(rPos);
     homeSourceFoundL = homeSource->GetHeat(lPos);
     homeSourceFoundR = homeSource->GetHeat(rPos);
+    wallFoundL = walls->GetHeat(lPos);
+    wallFoundR = walls->GetHeat(rPos);
 
-    if (foodSourceFoundL > 0 || foodSourceFoundR > 0)
+    if (wallFoundL > 0)
+    {
+        ReflectOffWall('l');
+        sourceFound = true;
+    }
+    else if (wallFoundR > 0)
+    {
+        ReflectOffWall('r');
+        sourceFound = true;
+    }
+    else if (foodSourceFoundL > 0 || foodSourceFoundR > 0)
     {
         if (currentPheromone != Pheromone::FoundFood)
             this->rotate(180);
@@ -227,10 +242,11 @@ void SwarmAgent::SetPheromoneMaps(HeatMap &toHome, HeatMap &toFood)
     this->toFood = &toFood;
 }
 
-void SwarmAgent::SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource)
+void SwarmAgent::SetSourceMaps(HeatMap &homeSource, HeatMap &foodSource, HeatMap &walls)
 {
     this->homeSource = &homeSource;
     this->foodSource = &foodSource;
+    this->walls = &walls;
 }
 
 sf::RectangleShape SwarmAgent::DebugRAntenna()
@@ -246,4 +262,31 @@ sf::RectangleShape SwarmAgent::DebugLAntenna()
     lA.setFillColor(sf::Color::Cyan);
     lA.setPosition(lAntenna.getPosition());
     return lA;
+}
+
+void SwarmAgent::ReflectOffWall(char sideHit)
+{
+    float rot = getRotation();
+    if (sideHit == 'l')
+    {
+        if ((rot > 0 && rot < 90) || (rot > 180 && rot < 270))
+        {
+            this->setRotation(180 - this->getRotation());
+        }
+        else if ((rot > 270 && rot < 360) || (rot > 90 && rot < 180))
+        {
+            this->setRotation(-this->getRotation());
+        }
+    }
+    else if (sideHit == 'r')
+    {
+        if ((rot > 270 && rot < 360) || (rot > 90 && rot < 180))
+        {
+            this->setRotation(180 - this->getRotation());
+        }
+        else if ((rot > 180 && rot < 270) || (rot > 0 && rot < 90))
+        {
+            this->setRotation(-this->getRotation());
+        }
+    }
 }

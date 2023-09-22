@@ -28,6 +28,10 @@ HeatMap::HeatMap(swt::HeatMap::HeatMapType hmType, swt::SwarmPreset &preset, swt
         this->baseHeatColor = theme.FOOD_SOURCE_COLOR;
         this->mapPrecision = preset.HEATMAP_SOURCE_RESOLUTION;
         break;
+    case HeatMapType::Walls:
+        this->baseHeatColor = theme.WALLS_COLOR;
+        this->mapPrecision = preset.HEATMAP_WALLS_RESOLUTION;
+        break;
     }
     this->visualAlphaCulling = preset.VISUALMAP_ALPHACULLING;
     this->maxVisualPoll = preset.VISUALMAP_POLLRATE;

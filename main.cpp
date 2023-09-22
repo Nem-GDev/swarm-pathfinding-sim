@@ -6,16 +6,17 @@
 #include "SwarmPreset.hpp"
 #include "ThemePreset.hpp"
 
-swt::SwarmPreset preset = swt::PRESET_MASSIVE3;
+swt::SwarmPreset preset = swt::PRESET_CUSTOM;
 swt::ThemePreset theme = swt::THEME_2;
 
 sf::Vector2f spawnPosition(preset.SCREEN_WIDTH / 2, preset.SCREEN_HEIGHT / 2);
 
 //-------------------------
 //? CONTROLS:
-//  H: Home (set)
-//  F: Food (set)
-//  C: Remove Source (Food/Home)
+//  H: Home (Place)
+//  F: Food (Place)
+//  W: Wall (Place)
+//  C: Remove tile
 //  S: Show paths
 //  A: Show ants
 //  D: Custom home path
@@ -33,10 +34,11 @@ int main(int, char **)
     swt::HeatMap pathHome(swt::HeatMap::HeatMapType::HomePath, preset, theme);
     swt::HeatMap homeSource(swt::HeatMap::HeatMapType::HomeSource, preset, theme);
     swt::HeatMap foodSource(swt::HeatMap::HeatMapType::FoodSource, preset, theme);
+    swt::HeatMap walls(swt::HeatMap::HeatMapType::Walls, preset, theme);
 
     swt::SwarmAgent swarm0(spawnPosition, preset, theme);
     swarm0.SetPheromoneMaps(pathHome, pathFood);
-    swarm0.SetSourceMaps(homeSource, foodSource);
+    swarm0.SetSourceMaps(homeSource, foodSource, walls);
     swt::Colony antColony(preset, swarm0);
 
     sf::Clock clock;
@@ -76,6 +78,8 @@ int main(int, char **)
             paint = 'r';
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
             paint = 'c';
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            paint = 'w';
 
         // Painting w/ LMB
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -97,9 +101,13 @@ int main(int, char **)
                 case 'r':
                     pathFood.AddHeat(sf::Vector2f(m.x, m.y), 32000);
                     break;
+                case 'w':
+                    walls.AddHeat(sf::Vector2f(m.x, m.y), 32000);
+                    break;
                 case 'c':
                     foodSource.AddHeat(sf::Vector2f(m.x, m.y), -32000);
                     homeSource.AddHeat(sf::Vector2f(m.x, m.y), -32000);
+                    walls.AddHeat(sf::Vector2f(m.x, m.y), -32000);
                     break;
 
                 default:
@@ -115,6 +123,7 @@ int main(int, char **)
         // Updating visual maps
         homeSource.UpdateVisualMap();
         foodSource.UpdateVisualMap();
+        walls.UpdateVisualMap();
         if (showPathMaps)
         {
             pathFood.UpdateVisualMap();
@@ -129,6 +138,7 @@ int main(int, char **)
                 window.draw(pathHome);
                 window.draw(pathFood);
             }
+            window.draw(walls);
             window.draw(homeSource);
             window.draw(foodSource);
             if (showAnts)
