@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+// SwarmSim V2.0 - github.com/Nem-GDev
 
 namespace swt
 {

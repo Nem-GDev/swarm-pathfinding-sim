@@ -7,6 +7,7 @@
 #include "HeatMap.hpp"
 #include "SwarmPreset.hpp"
 #include "ThemePreset.hpp"
+// SwarmSim V2.0 - github.com/Nem-GDev
 
 using namespace swt;
 

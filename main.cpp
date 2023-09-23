@@ -5,13 +5,14 @@
 #include "HeatMap.hpp"
 #include "SwarmPreset.hpp"
 #include "ThemePreset.hpp"
+// SwarmSim V2.0 - github.com/Nem-GDev
 
-swt::SwarmPreset preset = swt::PRESET_CUSTOM;
+swt::SwarmPreset preset = swt::PRESET_1;
 swt::ThemePreset theme = swt::THEME_2;
 
 sf::Vector2f spawnPosition(preset.SCREEN_WIDTH / 2, preset.SCREEN_HEIGHT / 2);
 
-//-------------------------
+//------------------------------------
 //? CONTROLS:
 //  H: Home (Place)
 //  F: Food (Place)
@@ -21,7 +22,7 @@ sf::Vector2f spawnPosition(preset.SCREEN_WIDTH / 2, preset.SCREEN_HEIGHT / 2);
 //  A: Show ants
 //  D: Custom home path
 //  R: Custom food path
-//-------------------------
+//------------------------------------
 int main(int, char **)
 {
     std::cout << "Hello, from swarm-pathfinding-sim!\n";

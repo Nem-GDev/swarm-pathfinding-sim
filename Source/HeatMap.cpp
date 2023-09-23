@@ -4,6 +4,7 @@
 #include <vector>
 #include "SwarmPreset.hpp"
 #include "ThemePreset.hpp"
+// SwarmSim V2.0 - github.com/Nem-GDev
 
 using namespace swt;
 
@@ -115,13 +116,15 @@ short HeatMap::GetHeat(sf::Vector2f point)
 }
 void HeatMap::TickDown(float strength, float dt)
 {
+    short temp;
+    float bias;
     for (int i = 0; i < mapHeight; i++)
     {
-        short temp;
         for (int j = 0; j < mapWidth; j++)
         {
             // will not go lower than 0
-            temp = map[i][j] - (dt * strength);
+            bias = map[i][j] / 16000.f;
+            temp = map[i][j] - (dt * strength * bias);
             map[i][j] = std::max((short)0, temp);
         }
     }

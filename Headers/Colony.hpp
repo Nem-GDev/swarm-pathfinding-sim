@@ -3,6 +3,7 @@
 #include <vector>
 #include "SwarmAgent.hpp"
 #include <thread>
+// SwarmSim V2.0 - github.com/Nem-GDev
 
 namespace swt
 {
