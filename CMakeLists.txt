@@ -4,7 +4,8 @@ project(swarm-pathfinding-sim VERSION 0.1.0 LANGUAGES CXX)
 include(CTest)
 enable_testing()
 add_executable(swarm-pathfinding-sim main.cpp Source/HeatMap.cpp Headers/HeatMap.hpp Source/SwarmAgent.cpp Headers/SwarmAgent.hpp
-    Source/Colony.cpp Headers/Colony.hpp Headers/SwarmPreset.hpp Headers/ThemePreset.hpp)
+    Source/Colony.cpp Headers/Colony.hpp Headers/SwarmPreset.hpp Source/SimulationInstance.cpp Source/SwarmPreset.cpp
+    Headers/SimulationInstance.hpp)
 
 find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
 target_link_libraries(swarm-pathfinding-sim PRIVATE sfml-system sfml-window sfml-graphics)

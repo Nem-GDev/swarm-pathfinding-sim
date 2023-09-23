@@ -6,12 +6,11 @@
 #include <time.h>
 #include "HeatMap.hpp"
 #include "SwarmPreset.hpp"
-#include "ThemePreset.hpp"
 // SwarmSim V2.0 - github.com/Nem-GDev
 
 using namespace swt;
 
-Colony::Colony(swt::SwarmPreset preset, swt::SwarmAgent agentTemplate)
+Colony::Colony(swt::SwarmConfig preset, swt::SwarmAgent agentTemplate)
 {
     colonySize = preset.COLONY_SIZE;
     float angleIncrement = 360.0f / colonySize;

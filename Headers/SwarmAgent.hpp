@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include "HeatMap.hpp"
 #include "SwarmPreset.hpp"
-#include "ThemePreset.hpp"
 // SwarmSim V2.0 - github.com/Nem-GDev
 
 namespace swt
@@ -38,7 +37,7 @@ namespace swt
         int seed;
         sf::RectangleShape DebugRAntenna();
         sf::RectangleShape DebugLAntenna();
-        SwarmAgent(sf::Vector2f position, swt::SwarmPreset &preset, swt::ThemePreset &theme);
+        SwarmAgent(sf::Vector2f position, swt::SwarmConfig &preset, swt::ThemeConfig &theme);
         void MoveForward(float step, float dt);
         void SetMovementNoisePR(int pollRate, float strength, int directions);
         void SetPheromoneMaps(HeatMap &toHome, HeatMap &toFood);

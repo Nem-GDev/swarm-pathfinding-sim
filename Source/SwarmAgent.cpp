@@ -6,13 +6,12 @@
 #include "SwarmAgent.hpp"
 #include "HeatMap.hpp"
 #include "SwarmPreset.hpp"
-#include "ThemePreset.hpp"
 #include <time.h>
 // SwarmSim V2.0 - github.com/Nem-GDev
 
 using namespace swt;
 
-SwarmAgent::SwarmAgent(sf::Vector2f position, swt::SwarmPreset &preset, swt::ThemePreset &theme)
+SwarmAgent::SwarmAgent(sf::Vector2f position, swt::SwarmConfig &preset, swt::ThemeConfig &theme)
 {
     xOutOfBounds = false;
     yOutOfBounds = false;

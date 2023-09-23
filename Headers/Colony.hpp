@@ -20,7 +20,7 @@ namespace swt
         void DrawColonyThreaded(int s, int e);
 
     public:
-        Colony(swt::SwarmPreset preset, swt::SwarmAgent agentTemplate);
+        Colony(swt::SwarmConfig preset, swt::SwarmAgent agentTemplate);
         void TickMove(float steps, float dt);
         void TickMoveThreaded(float steps, unsigned short threads, float dt);
         void DrawColony(sf::RenderWindow &window);

@@ -3,13 +3,12 @@
 #include <iostream>
 #include <vector>
 #include "SwarmPreset.hpp"
-#include "ThemePreset.hpp"
 // SwarmSim V2.0 - github.com/Nem-GDev
 
 using namespace swt;
 
 //! SWARMSIM CONSTRUCTOR
-HeatMap::HeatMap(swt::HeatMap::HeatMapType hmType, swt::SwarmPreset &preset, swt::ThemePreset &theme)
+HeatMap::HeatMap(swt::HeatMap::HeatMapType hmType, swt::SwarmConfig &preset, swt::ThemeConfig &theme)
 {
     switch (hmType)
     {
@@ -159,7 +158,6 @@ void HeatMap::InitVisualMap()
     // }
     // std::cout << "Iterated times: " << b << std::endl;
 
-    std::cout << "Initing" << std::endl;
     sf::Vector2f v0(0, 0);
     sf::Vector2f v1(0, 0);
     sf::Vector2f v2(0, 0);
