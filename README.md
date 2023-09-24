@@ -2,8 +2,10 @@
 
 Live simulation of adaptable pathfinding, modelled loosely on the pheromone-based movements of ant colonies.
 
-![GitHub top language](https://img.shields.io/github/languages/top/nem-gdev/swarm-pathfinding-sim)
-    [![CodeFactor](https://www.codefactor.io/repository/github/nem-gdev/swarm-pathfinding-sim/badge/main)](https://www.codefactor.io/repository/github/nem-gdev/swarm-pathfinding-sim/overview/main)     ![GitHub](https://img.shields.io/github/license/nem-gdev/swarm-pathfinding-sim)
+![GitHub top language](https://img.shields.io/github/languages/top/nem-gdev/swarm-pathfinding-sim?style=for-the-badge&color=fuchsia)
+![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/nem-gdev/swarm-pathfinding-sim?style=for-the-badge&color=77%2C%20255%2C%200)
+![GitHub](https://img.shields.io/github/license/nem-gdev/swarm-pathfinding-sim?style=for-the-badge&color=critical)
+
 
 
 
