@@ -24,9 +24,10 @@ You may place multiple of these, and block the path or make a maze with the wall
 _**Depending on your CPU you may get lower framerates on bigger presets, which will decrease the stability of the simulation.**_
 
 **You can either download and run the executable (Windows), or compile the project yourself (any platform) explained in the next section.**
-1. Download & Run <a href="https://github.com/Nem-GDev/swarm-pathfinding-sim/releases/tag/v2.0" target="_blank">`swarm-pathfinding-sim.exe`</a>
-2. Commandline UI will guide you through choosing a theme & preset.
-3. Simulation Will start automatically.
+1. Download & Extract <a href="https://github.com/Nem-GDev/swarm-pathfinding-sim/releases/tag/v2.0" target="_blank">`SwarmSim_win64.rar`</a> _**(Windows 64bit)**_
+2. Run `swarm-pathfinding-sim.exe`
+3. Commandline UI will guide you through choosing a theme & preset.
+4. Simulation Will start automatically.
 
 
 ## Controls
