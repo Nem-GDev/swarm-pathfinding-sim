@@ -71,6 +71,6 @@ Thus sporadic, aggressive & highly adaptable/regenerative pathing was preferred 
 
 ## Credits
 
-Special thanks to my friends [Sepehr](https://github.com/Sephixum) & [Milad](https://github.com/MiliAxe) for their great suggestions & technical help with some aspects of C++.
+Special thanks to my friends <a href="https://github.com/Sephixum" target="_blank">**Sepehr**</a> & <a href="https://github.com/MiliAxe" target="_blank">**Milad**</a> for their great suggestions & technical help with some aspects of C++.
 
 
