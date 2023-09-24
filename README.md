@@ -52,7 +52,7 @@ To compile the C++ project you need:
 * A C++ compiler installed (`GCC` recommended)
 * CMake installed & setup on your system
 * <a href="https://vcpkg.io/en/" target="_blank">`vcpkg`</a> installed & setup on your system
-* `sfml:x64-windows` library installed on vcpkg
+* `sfml:x64-windows` library (or corresponding 64bit to your platform) installed on vcpkg
 
 Finally modify the `CMakePresets.json` file in the root of the repository;
 `"toolchainFile": "%ADDRESS%"`
