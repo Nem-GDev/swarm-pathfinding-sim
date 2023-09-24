@@ -22,7 +22,7 @@ You may place multiple of these, and block the path or make a maze with the wall
 _**Depending on your CPU you may get lower framerates on bigger presets, which will decrease the stability of the simulation.**_
 
 **You can either download and run the executable (Windows), or compile the project yourself (any platform) explained in the next section.**
-1. Download & Run [`swarm-pathfinding-sim.exe`](https://github.com/Nem-GDev/swarm-pathfinding-sim/releases/tag/v2.0)
+1. Download & Run <a href="https://github.com/Nem-GDev/swarm-pathfinding-sim/releases/tag/v2.0" target="_blank">`swarm-pathfinding-sim.exe`</a>
 2. Commandline UI will guide you through choosing a theme & preset.
 3. Simulation Will start automatically.
 
@@ -48,12 +48,13 @@ Controls are also mentioned in the commandline UI. For reference:
 To compile the C++ project you need:
 
 * A C++ compiler installed (`GCC` recommended)
-* CMake setup on your system
-* [`vcpkg`](https://vcpkg.io/en/) installed
+* CMake installed & setup on your system
+* <a href="https://vcpkg.io/en/" target="_blank">`vcpkg`</a> installed & setup on your system
 * `sfml:x64-windows` library installed on vcpkg
 
 Finally modify the `CMakePresets.json` file in the root of the repository;
 `"toolchainFile": "%ADDRESS%"`
+
 Where `%ADDRESS%` is the address to the `vcpkg.cmake` in the root folder of your vcpkg installation.
 
 And build the project with cmake: `cmake -B build -S "%PATH_TO_CLONED_REPO%" --preset RelWithDebInfo`
