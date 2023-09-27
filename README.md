@@ -60,7 +60,7 @@ Finally modify the `CMakePresets.json` file in the root of the repository;
 
 Where `%ADDRESS%` is the address to the `vcpkg.cmake` in the root folder of your vcpkg installation.
 
-And build the project with cmake: `cmake -B build -S "%PATH_TO_CLONED_REPO%" --preset RelWithDebInfo`
+And build the project with cmake: `cmake -B build -S "%PATH_TO_PROJECT_ROOT%" --preset RelWithDebInfo`
 
 
 ## Notes
