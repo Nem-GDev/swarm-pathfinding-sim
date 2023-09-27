@@ -1,20 +1,23 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-// SwarmSim V2.0 - github.com/Nem-GDev
+#include <vector>
+#include <nlohmann/json.hpp>
+// SwarmSim - github.com/Nem-GDev
 
 namespace swt
 {
+    const std::out_of_range rgbOutOfBounds = std::out_of_range("RGB color must be between 0 and 255");
     struct ThemeConfig
     {
-        const std::string CONFIG_NAME;
-        const sf::Color BACK_COLOR;
-        const sf::Color SWARM_COLOR;
+        std::string CONFIG_NAME;
+        sf::Color BACK_COLOR;
+        sf::Color SWARM_COLOR;
 
-        const sf::Color FOOD_PATH_COLOR;
-        const sf::Color FOOD_SOURCE_COLOR;
-        const sf::Color HOME_PATH_COLOR;
-        const sf::Color HOME_SOURCE_COLOR;
-        const sf::Color WALLS_COLOR;
+        sf::Color FOOD_PATH_COLOR;
+        sf::Color FOOD_SOURCE_COLOR;
+        sf::Color HOME_PATH_COLOR;
+        sf::Color HOME_SOURCE_COLOR;
+        sf::Color WALLS_COLOR;
     };
     //* NOTES:
     //*  Lower (screenwidth/swarmwidth) = Lower speed
@@ -23,40 +26,48 @@ namespace swt
     //*  Higher MaxPheromone = Less Unity = Less clarity = Less accuracy= Faster update/refresh/regeneration
     struct SwarmConfig
     {
-        const std::string CONFIG_NAME;
-        const int VISUALMAP_POLLRATE;
-        const int VISUALMAP_ALPHACULLING;
-        const int SCREEN_WIDTH;
-        const int SCREEN_HEIGHT;
+        std::string CONFIG_NAME;
+        int VISUALMAP_POLLRATE;
+        int VISUALMAP_ALPHACULLING;
+        int SCREEN_WIDTH;
+        int SCREEN_HEIGHT;
         //! Screen dimensions must be divisable by heatmap resolution!
-        const int HEATMAP_SOURCE_RESOLUTION;
-        const int HEATMAP_PATH_RESOLUTION;
-        const int HEATMAP_WALLS_RESOLUTION;
-        const int SWARM_WIDTH;
-        const int SWARM_HEIGHT;
+        int HEATMAP_SOURCE_RESOLUTION;
+        int HEATMAP_PATH_RESOLUTION;
+        int HEATMAP_WALLS_RESOLUTION;
+        int SWARM_WIDTH;
+        int SWARM_HEIGHT;
+        int COLONY_SIZE;
 
-        const int COLONY_SIZE;
-        const float SWARM_OBEDIENCE;
+        float SWARM_OBEDIENCE;
         //? Lower MaxPheromone = Higher Unity, Stability.
         //? Higher MaxPheromone = Higher mutation & new paths; Faster pathmap regeneration. Less Stability & Unity.
-        const float SWARM_MAX_PHEROMONE;
+        float SWARM_MAX_PHEROMONE;
         //? Depletion >= Decay for reversed path disappearance
         //? (Depletion+Decay)/Max_Pheromone = Relative range
-        const float SWARM_PHEROMONE_DEPLETION;
-        const float SWARM_PHEROMONE_DECAY;
-        const float SWARM_MOVE_STEPS;
-        const float SWARM_NOISE;
-        const int SWARM_NOISE_POLLRATE;
-        const int SWARM_NOISE_DIRECTIONS;
+        float SWARM_PHEROMONE_DEPLETION;
+        float SWARM_PHEROMONE_DECAY;
+        float SWARM_MOVE_STEPS;
+        float SWARM_NOISE;
+
+        int SWARM_NOISE_POLLRATE;
+        int SWARM_NOISE_DIRECTIONS;
     };
     class SwarmPreset
     {
     public:
         static std::string GetSwarmConfigList();
-        static bool GetSwarmConfig(int index, SwarmConfig *&preset);
+        static bool GetSwarmConfig(int index, SwarmConfig &preset);
 
         static std::string GetThemeConfigList();
-        static bool GetThemeConfig(int index, ThemeConfig *&theme);
+        static bool GetThemeConfig(int index, ThemeConfig &theme);
+
+        static ThemeConfig ParseTheme(nlohmann::json &json);
+        static sf::Color ParseColor(nlohmann::json &json, std::string key);
+        static std::vector<ThemeConfig> LoadThemes();
+
+        static SwarmConfig ParsePreset(nlohmann::json &json);
+        static std::vector<SwarmConfig> LoadPresets();
     };
 
     static ThemeConfig THEME_CONFIGS[] = {{

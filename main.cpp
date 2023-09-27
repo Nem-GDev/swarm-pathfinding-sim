@@ -1,11 +1,15 @@
 #include <iostream>
+#include <vector>
 #include <SFML/Graphics.hpp>
+#include <nlohmann/json.hpp>
+#include <fstream>
+#include <filesystem>
 #include "SwarmAgent.hpp"
 #include "Colony.hpp"
 #include "HeatMap.hpp"
 #include "SwarmPreset.hpp"
 #include "SimulationInstance.hpp"
-// SwarmSim V2.0 - github.com/Nem-GDev
+// SwarmSim - github.com/Nem-GDev
 //------------------------------------
 //? CONTROLS:
 //  H: Home (Place)
@@ -33,8 +37,8 @@ int main(int, char **)
     welcomeText += "-------------------------------------------\n";
     int index = 0;
     bool getInput;
-    swt::ThemeConfig *theme;
-    swt::SwarmConfig *preset;
+    swt::ThemeConfig theme;
+    swt::SwarmConfig preset;
 
     while (true)
     {
@@ -42,7 +46,7 @@ int main(int, char **)
         std::cout << welcomeText << std::endl;
         std::cout << "-Configure simulation-\n";
         std::cout << swt::SwarmPreset::GetThemeConfigList();
-        std::cout << "\nPlease choose a theme: ";
+        std::cout << "\nPlease choose theme number: ";
         while (getInput)
         {
             std::cin >> index;
@@ -62,10 +66,10 @@ int main(int, char **)
             std::cin.ignore(INT_MAX, '\n');
         }
 
-        std::cout << theme->CONFIG_NAME << std::endl;
-        std::cout << preset->CONFIG_NAME << std::endl;
+        std::cout << theme.CONFIG_NAME << std::endl;
+        std::cout << preset.CONFIG_NAME << std::endl;
 
-        swt::SimulationInstance instance(*preset, *theme);
+        swt::SimulationInstance instance(preset, theme);
         instance.RunSimulation();
     }
 

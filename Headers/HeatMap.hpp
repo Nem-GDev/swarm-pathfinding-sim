@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "SwarmPreset.hpp"
-// SwarmSim V2.0 - github.com/Nem-GDev
+// SwarmSim - github.com/Nem-GDev
 
 namespace swt
 {
@@ -20,7 +20,8 @@ namespace swt
         void InitVisualMap();
 
     public:
-        static enum HeatMapType {
+        enum HeatMapType
+        {
             FoodPath,
             FoodSource,
             HomePath,

@@ -2,8 +2,17 @@
     "version": 3,
     "configurePresets": [
         {
-            "name": "RelWithDebInfo",
-            "toolchainFile": "C:/src/vcpkg/scripts/buildsystems/vcpkg.cmake"
+            "name": "windows-x64",
+            "toolchainFile": "C:/src/vcpkg/scripts/buildsystems/vcpkg.cmake",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "architecture": {
+            "value": "x64",
+            "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}"
+              }
         }
     ]
 }

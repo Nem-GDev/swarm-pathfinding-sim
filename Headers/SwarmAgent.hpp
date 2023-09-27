@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "HeatMap.hpp"
 #include "SwarmPreset.hpp"
-// SwarmSim V2.0 - github.com/Nem-GDev
+// SwarmSim - github.com/Nem-GDev
 
 namespace swt
 {

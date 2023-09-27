@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "SwarmPreset.hpp"
-// SwarmSim V2.0 - github.com/Nem-GDev
+// SwarmSim - github.com/Nem-GDev
 
 using namespace swt;
 
