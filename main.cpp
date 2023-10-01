@@ -1,9 +1,4 @@
 #include <iostream>
-#include <vector>
-#include <SFML/Graphics.hpp>
-#include <nlohmann/json.hpp>
-#include <fstream>
-#include <filesystem>
 #include "SwarmAgent.hpp"
 #include "Colony.hpp"
 #include "HeatMap.hpp"
