@@ -53,14 +53,14 @@ To compile the C++ project you need:
 * A C++ compiler installed (`GCC` recommended)
 * CMake installed & setup on your system
 * <a href="https://vcpkg.io/en/" target="_blank">`vcpkg`</a> installed & setup on your system
-* `sfml:x64-windows` library (or corresponding 64bit to your platform) installed on vcpkg
+* `sfml:x64-windows` **AND** `nlohmann-json:x64-windows` libraries (or corresponding 64bit to your platform) installed on vcpkg
 
 Finally modify the `CMakePresets.json` file in the root of the repository;
 `"toolchainFile": "%ADDRESS%"`
 
 Where `%ADDRESS%` is the address to the `vcpkg.cmake` in the root folder of your vcpkg installation.
 
-And build the project with cmake: `cmake -B build -S "%PATH_TO_CLONED_REPO%" --preset RelWithDebInfo`
+And build the project with cmake: `cmake -B build -S "%PATH_TO_PROJECT_ROOT%" --preset RelWithDebInfo`
 
 
 ## Notes
