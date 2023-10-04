@@ -79,7 +79,7 @@ std::string SwarmPreset::GetThemeConfigList()
            << "[ " << i + j + 1 << " ]: ";
         ss << themes[j].CONFIG_NAME;
     }
-
+    
     return ss.str();
 }
 bool SwarmPreset::GetThemeConfig(int index, ThemeConfig &theme)

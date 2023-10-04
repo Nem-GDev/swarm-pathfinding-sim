@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "SwarmAgent.hpp"
-#include <thread>
 // SwarmSim - github.com/Nem-GDev
 
 namespace swt
